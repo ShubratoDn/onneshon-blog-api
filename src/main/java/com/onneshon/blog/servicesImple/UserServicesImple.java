@@ -31,6 +31,7 @@ public class UserServicesImple implements UserServices {
 		User user = new User();
 		userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "UserID ", userId));
 		
+		userDto.getName();
 		
 		return null;
 	}
