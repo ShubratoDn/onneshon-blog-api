@@ -26,14 +26,22 @@ public class UserServicesImple implements UserServices {
 		return userToUserDto(addedUser);
 	}
 
+	
+	
+	//update user info
 	@Override
 	public UserDto updateUser(UserDto userDto, int userId) {
 		User user = new User();
 		userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "UserID ", userId));
+			
+		user.setName(userDto.getName());
+		user.setEmail(userDto.getEmail());
+		user.setAbout(userDto.getAbout());
+		user.setImage(userDto.getImage());
 		
-		userDto.getName();
+		User updatedUser = userRepo.save(user);
 		
-		return null;
+		return this.userToUserDto(updatedUser);
 	}
 
 	@Override
