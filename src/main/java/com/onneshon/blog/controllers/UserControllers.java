@@ -58,7 +58,7 @@ public class UserControllers {
 	
 	
 	//get user by id
-	@GetMapping("/user/{userIds}")
+	@GetMapping("/user/{userId}")
 	public ResponseEntity<UserDto> getUser( @PathVariable int userId){
 		UserDto user = userServices.getUserById(userId);
 		return ResponseEntity.ok(user);		
@@ -67,8 +67,8 @@ public class UserControllers {
 	
 	
 	//get all user by id
-	@GetMapping("/user/{userIds}")
-	public ResponseEntity<List<UserDto>> getAllUser(@PathVariable int userId){
+	@GetMapping("/users/")
+	public ResponseEntity<List<UserDto>> getAllUser(){
 		List<UserDto> allUser = userServices.getAllUser();
 		return ResponseEntity.ok(allUser);		
 	}
