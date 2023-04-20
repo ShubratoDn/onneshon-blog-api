@@ -34,8 +34,8 @@ public class UserControllers {
 	//Update New User Info
 	@PutMapping("/user/{userId}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable int userId){
-		UserDto addedUser = userServices.addUser(userDto);		
-		return new ResponseEntity<UserDto>(addedUser,HttpStatus.CREATED);
+		UserDto updatedUser = userServices.updateUser(userDto, userId);		
+		return new ResponseEntity<UserDto>(updatedUser,HttpStatus.CREATED);
 	}
 	
 	

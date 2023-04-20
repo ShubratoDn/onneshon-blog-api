@@ -1,5 +1,6 @@
 package com.onneshon.blog.servicesImple;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,35 +33,56 @@ public class UserServicesImple implements UserServices {
 	@Override
 	public UserDto updateUser(UserDto userDto, int userId) {
 		User user = new User();
-		userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "UserID ", userId));
+		user = userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "UserID ", userId));
 			
 		user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
 		user.setAbout(userDto.getAbout());
 		user.setImage(userDto.getImage());
 		
+		System.out.println(user.getPassword());
+		System.out.println("================================");
+		System.out.println("Working");
+		System.out.println("================================");
+		System.out.println(userDto.getPassword());
 		User updatedUser = userRepo.save(user);
 		
 		return this.userToUserDto(updatedUser);
 	}
 
+	
+	
+	//deleting user
 	@Override
 	public void deleteUser(int userId) {
-		// TODO Auto-generated method stub
+		
+		User user = userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "UserID ", userId));
+		
+		userRepo.delete(user);
 		
 	}
 
+	
+	//get user by id
 	@Override
 	public UserDto getUserById(int userId) {
-		// TODO Auto-generated method stub
-		return null;
+		User user = userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "UserID ", userId));		
+		return this.userToUserDto(user);
 	}
 	
 	
+	//get all user
 	@Override
 	public List<UserDto> getAllUser() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<User> userList =  userRepo.findAll();
+		List<UserDto> users = new ArrayList<>();
+		
+		for(User user : userList){
+			users.add(this.userToUserDto(user));
+		}
+		
+		return users;
 	}
 	
 	

@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<Map<String, String>> methodArgumentNotValidExceptionHandler (MethodArgumentNotValidException ex){
 		
 		Map<String, String> response = new HashMap<>(); 
-		response.put("UserCreationError", "Invalid Input");
+		response.put("ValidationError", "Invalid Input");
 		
 		List<ObjectError> allErrors = ex.getBindingResult().getAllErrors();
 		
@@ -32,5 +32,22 @@ public class GlobalExceptionHandler {
 		}		
 		return new ResponseEntity<Map<String,String>>(response, HttpStatus.BAD_REQUEST);		
 	}
+	
+	
+	
+	
+	//resource not found Exception
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<Map<String, String>> resourceNotFoundExceptionHandler(
+			ResourceNotFoundException ex) {
+
+		Map<String, String> response = new HashMap<>();		
+
+		response.put("error", ex.getMessage());
+		
+		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+	}
+	
+	
 	
 }
