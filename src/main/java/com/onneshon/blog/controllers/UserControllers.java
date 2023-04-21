@@ -1,19 +1,12 @@
 package com.onneshon.blog.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onneshon.blog.helpers.FileUploadHelper;
 import com.onneshon.blog.helpers.FileValidation;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.UserDto;
@@ -48,23 +42,6 @@ public class UserControllers {
 	@Autowired
 	private ObjectMapper mapper;
 	
-	
-	
-	// OLD add new user
-	@PostMapping("/user/old")
-	public ResponseEntity<UserDto> addUserOld(@Valid @RequestBody UserDto userDto,
-			@RequestParam("image") MultipartFile file) {
-
-		try {
-			System.out.println(file.getName());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-//		UserDto addedUser = userServices.addUser(userDto);
-		UserDto addedUser = new UserDto();
-		return new ResponseEntity<UserDto>(addedUser, HttpStatus.CREATED);
-	}
 	
 	
 	
@@ -102,7 +79,14 @@ public class UserControllers {
 		Map<String, String> imageViolation = new FileValidation().imageValidation(file);
 		if(!imageViolation.isEmpty()) {
 			return ResponseEntity.badRequest().body(imageViolation);
-		}
+		}	
+		
+		//STEP 4: file upload
+		 boolean isUploadedUserImage = new FileUploadHelper().uploadUserImage(file); 
+		
+		 if(isUploadedUserImage) {
+			 System.out.println("Uploaded");
+		 }
 		
 		
 		
