@@ -37,8 +37,7 @@ public class UserServicesImple implements UserServices {
 			
 		user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
-		user.setAbout(userDto.getAbout());
-		user.setImage(userDto.getImage());
+		user.setAbout(userDto.getAbout());		
 		
 		System.out.println(user.getPassword());
 		System.out.println("================================");
