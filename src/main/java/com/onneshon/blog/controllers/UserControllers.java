@@ -137,48 +137,4 @@ public class UserControllers {
 		return ResponseEntity.ok(allUser);
 	}
 
-
-
-
-
-	@PostMapping("/test")
-	public ResponseEntity<?> upload(
-			@RequestParam("image") MultipartFile file,
-			@RequestParam("userData") String userData
-			) {
-		System.out.println(file.getOriginalFilename());
-
-		UserDto user = null;
-		try {
-
-			user = mapper.readValue(userData, UserDto.class);
-
-		} catch (Exception e) {
-			ResponseEntity.badRequest().body("bad req");
-		}
-
-		System.out.println(user);
-		
-		
-		// Validate the User's object
-	    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-	    Validator validator = factory.getValidator();
-	    Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
-		
-		System.out.println(violations);
-		
-		 if (violations.isEmpty()) {
-		        // Do something with the validated User object
-		        // ...
-		        return ResponseEntity.ok("User created successfully");
-		    } else {		    	
-		    	ValidationResponse vr = new ValidationResponse();
-		    	Map<String, String> resp = vr.getErrors(violations);
-		    	
-		    	return ResponseEntity.badRequest().body(resp);
-		    }	
-		 
-
-	}
-
 }
