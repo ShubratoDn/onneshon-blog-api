@@ -25,7 +25,9 @@ import com.onneshon.blog.helpers.FileValidation;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.UserDto;
 import com.onneshon.blog.payloads.ValidationResponse;
+import com.onneshon.blog.services.FileService;
 import com.onneshon.blog.services.UserServices;
+import com.onneshon.blog.servicesImple.FileServicesImple;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
@@ -43,6 +45,8 @@ public class UserControllers {
 	@Autowired
 	private ObjectMapper mapper;
 	
+	@Autowired
+	private FileService fileService ;
 	
 	
 	
@@ -76,17 +80,19 @@ public class UserControllers {
 		
 		
 		
+		
 		//STEP 3: file validation		
-		Map<String, String> imageViolation = new FileValidation().imageValidation(file);
+		//Map<String, String> imageViolation = new FileValidation().imageValidation(file);
+		Map<String, String> imageViolation = fileService.userImageValidation(file);
 		if(!imageViolation.isEmpty()) {
 			return ResponseEntity.badRequest().body(imageViolation);
 		}	
 		
-		//STEP 4: file upload
-		 String imagePath = new FileUploadHelper().uploadUserImage(file);		
-		 if(imagePath == null) {
+		//STEP 4: file upload		
+		String imagePath = fileService.uploadUserImage(file);
+		if(imagePath == null) {
 			 return ResponseEntity.badRequest().body(new HashMap<>().put("FileError", "File Upload Fail"));
-		 }
+		}
 		 
 		 
 		 //STEP 5: Upload Data
