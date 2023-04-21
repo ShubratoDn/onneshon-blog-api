@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.onneshon.blog.helpers.FileUploadHelper;
-import com.onneshon.blog.helpers.FileValidation;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.UserDto;
 import com.onneshon.blog.payloads.ValidationResponse;
@@ -45,8 +43,8 @@ public class UserControllers {
 	@Autowired
 	private ObjectMapper mapper;
 	
-	@Autowired
-	private FileService fileService ;
+//	@Autowired
+//	private FileService fileService ;
 	
 	
 	
@@ -80,6 +78,8 @@ public class UserControllers {
 		
 		
 		
+		//AUTO wire korle problem hocchilo. Ager value gula dhore rakhtesilo
+		FileService fileService = new FileServicesImple();
 		
 		//STEP 3: file validation		
 		//Map<String, String> imageViolation = new FileValidation().imageValidation(file);

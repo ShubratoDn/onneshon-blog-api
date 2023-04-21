@@ -28,7 +28,7 @@ public class FileServicesImple implements FileService{
 	public Map<String, String> userImageValidation(MultipartFile image) {
 		
 		this.minImageSize = AppConstants.MINIMUM_SIZE_OF_USERIMAGE_KB;
-		this.minImageSize = AppConstants.MINIMUM_SIZE_OF_USERIMAGE_KB;
+		this.maxImageSize = AppConstants.MAXIMUM_SIZE_OF_USERIMAGE_KB;
 		
 		response = imageValidation(image);		
 		return response;
@@ -44,16 +44,16 @@ public class FileServicesImple implements FileService{
 			response.put("FileError", "Please, insert image!");
 			return response;
 		}
-
-		if (fileSizeinKb < minImageSize || fileSizeinKb > maxImageSize) {
-			response.put("FileError", "File size should between "+minImageSize+"kb and "+maxImageSize+"kb");
-			return response;
-		}
-
+		
 		if (!image.getContentType().equals("image/png") && !image.getContentType().equals("image/jpeg")) {
 			response.put("FileError", "Only JPG, PNG format of file supports");
 			return response;
 		}
+
+		if (fileSizeinKb < minImageSize || fileSizeinKb > maxImageSize) {
+			response.put("FileError", "File size should between "+minImageSize+"kb and "+maxImageSize+"kb"+fileSizeinKb);
+			return response;
+		}		
 
 		return response;
 	}
