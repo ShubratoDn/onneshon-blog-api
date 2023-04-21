@@ -1,10 +1,18 @@
 package com.onneshon.blog.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,67 +20,133 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onneshon.blog.helpers.UserValidator;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.UserDto;
 import com.onneshon.blog.services.UserServices;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 @RestController
 @RequestMapping("/api")
 public class UserControllers {
-    
+
 	@Autowired
-	private UserServices userServices;	
-	
-	
-	//add new user 
+	private UserServices userServices;
+
+	// add new user
 	@PostMapping("/user/")
-	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDto userDto){
-		UserDto addedUser = userServices.addUser(userDto);		
-		return new ResponseEntity<UserDto>(addedUser,HttpStatus.CREATED);
+	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDto userDto,
+			@RequestParam("image") MultipartFile file) {
+
+		try {
+			System.out.println(file.getName());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+//		UserDto addedUser = userServices.addUser(userDto);
+		UserDto addedUser = new UserDto();
+		return new ResponseEntity<UserDto>(addedUser, HttpStatus.CREATED);
 	}
-	
-	
-	//Update New User Info
+
+	// Update New User Info
 	@PutMapping("/user/{userId}")
-	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable int userId){
-		UserDto updatedUser = userServices.updateUser(userDto, userId);		
-		return new ResponseEntity<UserDto>(updatedUser,HttpStatus.CREATED);
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable int userId) {
+		UserDto updatedUser = userServices.updateUser(userDto, userId);
+		return new ResponseEntity<UserDto>(updatedUser, HttpStatus.CREATED);
 	}
-	
-	
-	//delete user by id
+
+	// delete user by id
 	@DeleteMapping("/user/{userId}")
-	public ResponseEntity<ApiResponse> deleteUser( @PathVariable int userId){
-		userServices.deleteUser(userId);	
-		
-		ApiResponse reponse = new ApiResponse("UserDelete", true,"User Deleted");
-		
+	public ResponseEntity<ApiResponse> deleteUser(@PathVariable int userId) {
+		userServices.deleteUser(userId);
+
+		ApiResponse reponse = new ApiResponse("UserDelete", true, "User Deleted");
+
 		return new ResponseEntity<ApiResponse>(reponse, HttpStatus.OK);
 	}
-	
-	
-	
-	
-	//get user by id
+
+	// get user by id
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<UserDto> getUser( @PathVariable int userId){
+	public ResponseEntity<UserDto> getUser(@PathVariable int userId) {
 		UserDto user = userServices.getUserById(userId);
-		return ResponseEntity.ok(user);		
+		return ResponseEntity.ok(user);
 	}
-	
-	
-	
-	//get all user by id
+
+	// get all user by id
 	@GetMapping("/users/")
-	public ResponseEntity<List<UserDto>> getAllUser(){
+	public ResponseEntity<List<UserDto>> getAllUser() {
 		List<UserDto> allUser = userServices.getAllUser();
-		return ResponseEntity.ok(allUser);		
+		return ResponseEntity.ok(allUser);
 	}
-	
-	
-	
+
+	@Autowired
+	private ObjectMapper mapper;
+
+	@Autowired
+	private UserValidator userValidator;
+
+	@Autowired
+	private Validator validator;
+
+	@PostMapping("/test")
+	public ResponseEntity<?> upload(
+			@RequestParam("image") MultipartFile file,
+			@RequestParam("userData") String userData
+			) {
+		System.out.println(file.getOriginalFilename());
+
+		UserDto user = null;
+		try {
+
+			user = mapper.readValue(userData, UserDto.class);
+
+		} catch (Exception e) {
+			ResponseEntity.badRequest().body("bad req");
+		}
+
+		System.out.println(user);
+		
+		
+		// Validate the User's object
+	    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	    Validator validator = factory.getValidator();
+	    Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
+		
+		System.out.println(violations);
+		
+		 if (violations.isEmpty()) {
+		        // Do something with the validated User object
+		        // ...
+		        return ResponseEntity.ok("User created successfully");
+		    } else {
+		            // Throw MethodArgumentNotValidException for each validation error
+		            List<ObjectError> errors = new ArrayList<>();
+		            for (ConstraintViolation<UserDto> violation : violations) {
+		                errors.add(new ObjectError(violation.getPropertyPath().toString(), 
+		                    violation.getMessage()));
+		                
+		            }
+		            System.out.println(errors);
+		            return ResponseEntity.badRequest().body(errors);
+		    	
+		        // Handle validation errors
+//		        String errorMessage = violations.stream()
+//		            .map(v -> v.getPropertyPath() + " " + v.getMessage())
+//		            .collect(Collectors.joining("; "));
+//		        return ResponseEntity.badRequest().body(errorMessage);
+		    }		
+
+	}
+
 }

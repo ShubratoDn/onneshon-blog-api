@@ -18,7 +18,9 @@ public class UserDto {
 	@Size(min =3, message = "Name should contain minimum 3 character")
 	private String name;
 	
+	@Size(min = 4, message = "Minimum 4 character required")
 	private String password;
+	
 	
 	@Email(message = "Invalid Email")
 	private String email;
