@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onneshon.blog.helpers.FileValidation;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.UserDto;
 import com.onneshon.blog.payloads.ValidationResponse;
@@ -97,10 +98,12 @@ public class UserControllers {
 		
 		
 		
-		//STEP 3: file validation
+		//STEP 3: file validation		
+		Map<String, String> imageViolation = new FileValidation().imageValidation(file);
+		if(!imageViolation.isEmpty()) {
+			return ResponseEntity.badRequest().body(imageViolation);
+		}
 		
-		
-
 		
 		
 
