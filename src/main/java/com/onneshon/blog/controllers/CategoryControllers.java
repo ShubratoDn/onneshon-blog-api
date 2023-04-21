@@ -18,6 +18,8 @@ import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.CategoryDto;
 import com.onneshon.blog.services.CategoryServices;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/category")
 public class CategoryControllers {
@@ -27,14 +29,14 @@ public class CategoryControllers {
 	
 	//creating category
 	@PostMapping("/")
-	public ResponseEntity<?> addCategory(@RequestBody CategoryDto catDto){
+	public ResponseEntity<?> addCategory(@Valid @RequestBody CategoryDto catDto){
 		CategoryDto addCategory = catServices.addCategory(catDto);
 		return new ResponseEntity<>(addCategory, HttpStatus.CREATED);
 	}
 	
 	//update category
 	@PutMapping("/{catId}")
-	public ResponseEntity<?> updateCategory(@RequestBody CategoryDto catDto, @PathVariable("catId") int catId){
+	public ResponseEntity<?> updateCategory(@Valid @RequestBody CategoryDto catDto, @PathVariable("catId") int catId){
 		CategoryDto updateCategory = catServices.updateCategory(catDto, catId);
 		return new ResponseEntity<>(updateCategory, HttpStatus.CREATED);
 	}
