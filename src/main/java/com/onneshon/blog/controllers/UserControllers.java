@@ -2,6 +2,7 @@ package com.onneshon.blog.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,9 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.onneshon.blog.helpers.UserValidator;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.UserDto;
+import com.onneshon.blog.payloads.ValidationResponse;
 import com.onneshon.blog.services.UserServices;
 
 import jakarta.validation.ConstraintViolation;
@@ -93,11 +94,7 @@ public class UserControllers {
 	@Autowired
 	private ObjectMapper mapper;
 
-	@Autowired
-	private UserValidator userValidator;
 
-	@Autowired
-	private Validator validator;
 
 	@PostMapping("/test")
 	public ResponseEntity<?> upload(
@@ -129,23 +126,14 @@ public class UserControllers {
 		        // Do something with the validated User object
 		        // ...
 		        return ResponseEntity.ok("User created successfully");
-		    } else {
-		            // Throw MethodArgumentNotValidException for each validation error
-		            List<ObjectError> errors = new ArrayList<>();
-		            for (ConstraintViolation<UserDto> violation : violations) {
-		                errors.add(new ObjectError(violation.getPropertyPath().toString(), 
-		                    violation.getMessage()));
-		                
-		            }
-		            System.out.println(errors);
-		            return ResponseEntity.badRequest().body(errors);
+		    } else {		    	
+		    	ValidationResponse vr = new ValidationResponse();
+		    	Map<String, String> resp = vr.sendMessage(violations);
 		    	
-		        // Handle validation errors
-//		        String errorMessage = violations.stream()
-//		            .map(v -> v.getPropertyPath() + " " + v.getMessage())
-//		            .collect(Collectors.joining("; "));
-//		        return ResponseEntity.badRequest().body(errorMessage);
-		    }		
+		    	return ResponseEntity.badRequest().body(resp);	    	
+		    	
+		    }	
+		 
 
 	}
 
