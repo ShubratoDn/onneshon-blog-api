@@ -1,5 +1,6 @@
 package com.onneshon.blog.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.onneshon.blog.payloads.BlogDto;
+import com.onneshon.blog.services.BlogServices;
 
 import jakarta.validation.Valid;
 
@@ -15,6 +17,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api")
 public class BlogControllers {
 
+	@Autowired
+	BlogServices blogServices;
 	
 	//add post
 	@PostMapping("/user/{userId}/blog")
@@ -23,9 +27,9 @@ public class BlogControllers {
 			@PathVariable int userId
 			){
 		
+		BlogDto addedBlog = blogServices.addBlog(blogDto, userId);
 		
-		
-		return ResponseEntity.ok(blogDto);
+		return ResponseEntity.ok(addedBlog);
 	}
 	
 }

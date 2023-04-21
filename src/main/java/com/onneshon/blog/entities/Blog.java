@@ -1,6 +1,7 @@
 package com.onneshon.blog.entities;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,5 +45,15 @@ public class Blog {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+
+
+	@Override
+	public String toString() {
+		return "Blog [id=" + id + ", blogTitle=" + blogTitle + ", blogContent=" + blogContent + ", blogImage="
+				+ blogImage + ", addedDate=" + addedDate + ", category=" + category + ", user=" + user + "]";
+	}
+	
+	
+	
 	
 }

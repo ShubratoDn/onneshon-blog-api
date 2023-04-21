@@ -5,10 +5,10 @@ import com.onneshon.blog.payloads.BlogDto;
 public interface BlogServices {
 
 	//create Blog
-	BlogDto addBlog(BlogDto blog);
+	BlogDto addBlog(BlogDto blog, int userId);
 	
 	//update Blog
-	BlogDto updateBlog(BlogDto blog);
+	BlogDto updateBlog(BlogDto blog, int userId);
 	
 	
 }
