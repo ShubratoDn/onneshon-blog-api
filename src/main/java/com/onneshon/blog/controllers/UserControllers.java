@@ -43,10 +43,15 @@ public class UserControllers {
 
 	@Autowired
 	private UserServices userServices;
-
-	// add new user
-	@PostMapping("/user/")
-	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDto userDto,
+	
+	@Autowired
+	private ObjectMapper mapper;
+	
+	
+	
+	// OLD add new user
+	@PostMapping("/user/old")
+	public ResponseEntity<UserDto> addUserOld(@Valid @RequestBody UserDto userDto,
 			@RequestParam("image") MultipartFile file) {
 
 		try {
@@ -59,7 +64,53 @@ public class UserControllers {
 		UserDto addedUser = new UserDto();
 		return new ResponseEntity<UserDto>(addedUser, HttpStatus.CREATED);
 	}
+	
+	
+	
+	//adding user
+	@PostMapping("/user/")
+	public ResponseEntity<?> addUser(
+			@RequestParam("userData") String userData,
+			@RequestParam("image") MultipartFile file) {
 
+		UserDto userDto = null;
+		try {
+			//STEP 1: converting the user Data into UserDto
+			userDto = mapper.readValue(userData, UserDto.class);
+		} catch (Exception e) {
+			ApiResponse resp = new ApiResponse("InvalidDataConversion", false, "User Data Convert failed");
+			return ResponseEntity.badRequest().body(resp);
+		}
+		
+		//STEP 2: Validating User Data
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
+		
+		//checking if there is any error
+		if(!violations.isEmpty()) {
+			//@Autowire korle problem hoitasilo 
+			ValidationResponse validResp = new ValidationResponse();
+			Map<String, String> resp = validResp.getErrors(violations);
+			return ResponseEntity.badRequest().body(resp);
+		}
+		
+		
+		
+		//STEP 3: file validation
+		
+		
+
+		
+		
+
+		return new ResponseEntity<UserDto>(userDto, HttpStatus.CREATED);
+	}
+	
+	
+	
+	
+	
 	// Update New User Info
 	@PutMapping("/user/{userId}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable int userId) {
@@ -91,8 +142,7 @@ public class UserControllers {
 		return ResponseEntity.ok(allUser);
 	}
 
-	@Autowired
-	private ObjectMapper mapper;
+
 
 
 
@@ -128,10 +178,9 @@ public class UserControllers {
 		        return ResponseEntity.ok("User created successfully");
 		    } else {		    	
 		    	ValidationResponse vr = new ValidationResponse();
-		    	Map<String, String> resp = vr.sendMessage(violations);
+		    	Map<String, String> resp = vr.getErrors(violations);
 		    	
-		    	return ResponseEntity.badRequest().body(resp);	    	
-		    	
+		    	return ResponseEntity.badRequest().body(resp);
 		    }	
 		 
 

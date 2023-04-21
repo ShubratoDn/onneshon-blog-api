@@ -4,33 +4,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.stereotype.Service;
 
 import jakarta.validation.ConstraintViolation;
 
-
+@Service
 public class ValidationResponse {
 
-//	private Set<ConstraintViolation<UserDto>> violations;
-//	
-//	public ValidationResponse(Set<ConstraintViolation<UserDto>> violations) {
-//		this.violations = (Set<ConstraintViolation<UserDto>>) violations;
-//	}
-//	
+	private Map<String, String> response = new HashMap<>();	
 	
-	public Map<String, String> sendMessage(Set<ConstraintViolation<UserDto>> violations) {	
-		Map<String, String> response = new HashMap<>();	
-		
+	
+	//for USER
+	public Map<String, String> getErrors(Set<ConstraintViolation<UserDto>> violations) {	
 		for(ConstraintViolation<?> violation : violations) {			
 			String fieldName = violation.getPropertyPath().toString();
 			String message = violation.getMessage();			
 			response.put(fieldName, message);			
-		}
-		
+		}		
 		return response;				
 	}
-	
+
+
 }
