@@ -24,8 +24,7 @@ public class UserDto {
 	
 	@Email(message = "Invalid Email")
 	private String email;
-	
-	@NotEmpty(message = "Image Cannot be empty")
+
 	private String image;
 	
 	@Size(max = 999, message = "Maximum 1000 characters allowed")

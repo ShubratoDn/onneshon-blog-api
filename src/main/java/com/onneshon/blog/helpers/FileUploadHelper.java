@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.security.SecureRandom;
-import java.time.Instant;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +12,7 @@ public class FileUploadHelper {
 
 	private String UPLOAD_DIR  ;
 	
-	public boolean uploadUserImage(MultipartFile image) {		
+	public String uploadUserImage(MultipartFile image) {		
 		this.UPLOAD_DIR = "src/main/resources/static/UserImages";		
 		return uploadFile(image);
 	}
@@ -21,7 +20,7 @@ public class FileUploadHelper {
 	
 	
 	//uploading file
-	private boolean uploadFile(MultipartFile image) {
+	private String uploadFile(MultipartFile image) {
 		
 		//Random text generate
 		SecureRandom random = new SecureRandom();
@@ -34,8 +33,7 @@ public class FileUploadHelper {
         }
         String randomHexCode = sb.toString();
         
-        String filePath = "User_Image_"+randomHexCode+"_"+System.currentTimeMillis()+"_";
-		
+        String filePath ="User_Image_"+randomHexCode+"_"+System.currentTimeMillis()+"_.jpg";		
 		
 		try {
 			
@@ -47,17 +45,17 @@ public class FileUploadHelper {
 			byte data[] = new byte[inputStream.available()];
 			inputStream.read(data);
 			
-			FileOutputStream fos = new FileOutputStream(UPLOAD_DIR+File.separator+filePath+".jpg");
+			FileOutputStream fos = new FileOutputStream(UPLOAD_DIR+File.separator+filePath);
 			fos.write(data);
 			
 			fos.flush();
 			fos.close();
 			
-			return true;
+			return filePath;
 			
 		}catch (Exception e) {
 			System.out.println("FILE UPLOAD FAIL"+e);
-			return false;
+			return null;
 		}
 	}
 	

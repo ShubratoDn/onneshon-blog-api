@@ -1,5 +1,6 @@
 package com.onneshon.blog.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -82,18 +83,17 @@ public class UserControllers {
 		}	
 		
 		//STEP 4: file upload
-		 boolean isUploadedUserImage = new FileUploadHelper().uploadUserImage(file); 
-		
-		 if(isUploadedUserImage) {
-			 System.out.println("Uploaded");
-		 }else {
-			 System.out.println("Failed to Uploaded");
+		 String imagePath = new FileUploadHelper().uploadUserImage(file);		
+		 if(imagePath == null) {
+			 return ResponseEntity.badRequest().body(new HashMap<>().put("FileError", "File Upload Fail"));
 		 }
-		
-		
-		
+		 
+		 
+		 //STEP 5: Upload Data
+		 userDto.setImage(imagePath);
+		 UserDto addedUser = userServices.addUser(userDto);		
 
-		return new ResponseEntity<UserDto>(userDto, HttpStatus.CREATED);
+		return new ResponseEntity<UserDto>(addedUser, HttpStatus.CREATED);
 	}
 	
 	
