@@ -86,6 +86,8 @@ public class UserControllers {
 		
 		 if(isUploadedUserImage) {
 			 System.out.println("Uploaded");
+		 }else {
+			 System.out.println("Failed to Uploaded");
 		 }
 		
 		
