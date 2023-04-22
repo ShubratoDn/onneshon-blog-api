@@ -24,5 +24,16 @@ public class ValidationResponse {
 		return response;				
 	}
 
+	
+	// for USER
+	public Map<String, String> getBlogErrors(Set<ConstraintViolation<BlogDto>> violations) {
+		for (ConstraintViolation<?> violation : violations) {
+			String fieldName = violation.getPropertyPath().toString();
+			String message = violation.getMessage();
+			response.put(fieldName, message);
+		}
+		return response;
+	}
+
 
 }

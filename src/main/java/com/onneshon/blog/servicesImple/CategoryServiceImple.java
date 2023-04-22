@@ -78,7 +78,7 @@ public class CategoryServiceImple implements CategoryServices{
 	//_______________________________________
 	//DTO conversion
 	//___________________________________
-	Category catDtoTocat(CategoryDto catDto) {
+	public Category catDtoTocat(CategoryDto catDto) {
 		Category cat = new Category();
 		
 		cat.setCategoryId(catDto.getCategoryId());
@@ -88,7 +88,7 @@ public class CategoryServiceImple implements CategoryServices{
 		return cat;
 	}
 	
-	CategoryDto catTocatDto(Category cat) {
+	public CategoryDto catTocatDto(Category cat) {
 		CategoryDto catDto = new CategoryDto();
 		
 		catDto.setCategoryId(cat.getCategoryId());

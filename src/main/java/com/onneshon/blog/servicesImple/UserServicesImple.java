@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.onneshon.blog.entities.User;
 import com.onneshon.blog.exceptions.ResourceNotFoundException;
 import com.onneshon.blog.payloads.UserDto;
+import com.onneshon.blog.payloads.UserDtoSecure;
 import com.onneshon.blog.repositories.UserRepo;
 import com.onneshon.blog.services.UserServices;
 
@@ -118,6 +119,17 @@ public class UserServicesImple implements UserServices {
 	}
 
 
+	//user to user dto secure
+	public UserDtoSecure userToUserDtoSecure(User user) {
+		UserDtoSecure userDtoSecure = new UserDtoSecure();
+		
+		userDtoSecure.setId(user.getId());
+		userDtoSecure.setName(user.getName());
+		userDtoSecure.setAbout(user.getAbout());
+		userDtoSecure.setImage(user.getImage());	
+		
+		return userDtoSecure;
+	}
 	
 	
 	

@@ -37,6 +37,8 @@ public class Blog {
 
 	private Date addedDate;
 	
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;

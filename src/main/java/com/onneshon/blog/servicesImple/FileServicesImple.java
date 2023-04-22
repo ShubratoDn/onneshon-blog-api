@@ -35,6 +35,18 @@ public class FileServicesImple implements FileService{
 	}
 	
 	
+	//USER IMAGE VALIDATION
+	@Override
+	public Map<String, String> blogImageValidation(MultipartFile image) {
+		
+		this.minImageSize = AppConstants.MINIMUM_SIZE_OF_USERIMAGE_KB;
+		this.maxImageSize = AppConstants.MAXIMUM_SIZE_OF_BLOGIMAGE_KB;
+		
+		response = imageValidation(image);		
+		return response;
+	}
+	
+	
 	//image validation
 	private Map<String, String> imageValidation(MultipartFile image) {
 
@@ -61,11 +73,30 @@ public class FileServicesImple implements FileService{
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	@Override
 	//upload User Image
 	public String uploadUserImage(MultipartFile image) {		
 		this.UPLOAD_DIR = "src/main/resources/static/UserImages";		
 		return uploadFile(image);
 	}
+	
+	@Override
+	//Blog User Image
+	public String uploadBlogImage(MultipartFile image) {		
+		this.UPLOAD_DIR = "src/main/resources/static/BlogImages";		
+		return uploadFile(image);
+	}
+	
+	
+	
+	
+	
 	
 	//uploading file
 	private String uploadFile(MultipartFile image) {

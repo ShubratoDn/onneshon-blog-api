@@ -2,9 +2,6 @@ package com.onneshon.blog.payloads;
 
 import java.util.Date;
 
-import com.onneshon.blog.entities.Category;
-import com.onneshon.blog.entities.User;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -27,25 +24,20 @@ public class BlogDto {
 	@NotEmpty(message = "Content can not empty")
 	private String blogContent;
 	
-	private String blogImage;
-
-	private Category category;
-	
+	private String blogImage;	
 	private Date addedDate;
 	
 	@NotNull(message = "Category can not Null")
     @Min(value = 1, message = "Please, insert Category")
 	private int categoryId;
-
-	private User user;
-
-	@Override
-	public String toString() {
-		return "BlogDto [id=" + id + ", blogTitle=" + blogTitle + ", blogContent=" + blogContent + ", blogImage="
-				+ blogImage + ", category=" + category + ", addedDate=" + addedDate + ", categoryId=" + categoryId
-				+ ", user=" + user + "]";
-	}
 	
+	
+	
+	private CategoryDto category;
+
+//	private UserDto user;
+	private UserDtoSecure user;
+
 	
 	
 }
