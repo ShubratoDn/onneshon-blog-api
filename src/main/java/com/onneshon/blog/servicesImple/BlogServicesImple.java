@@ -2,6 +2,7 @@ package com.onneshon.blog.servicesImple;
 
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,34 +75,60 @@ public class BlogServicesImple implements BlogServices{
 
 	
 
+	//deleteblog
 	@Override
-	public void deletBlog(int blogId) {
-		// TODO Auto-generated method stub
-		
+	public void deleteBlog(int blogId) {		
+		Blog blog = blogRepo.findById(blogId).orElseThrow(()-> new ResourceNotFoundException("Blog", "BlogId", blogId));		
+		blogRepo.delete(blog);		
 	}
 
+	//get blog by id
 	@Override
 	public BlogDto getBlogById(int blogId) {
-		// TODO Auto-generated method stub
-		return null;
+		Blog blog = blogRepo.findById(blogId).orElseThrow(()-> new ResourceNotFoundException("Blog", "BlogId", blogId));
+		return this.blogToBlogDto(blog);
 	}
-
+	
+	
+	
+	//get all blogs
 	@Override
 	public List<BlogDto> getAllBlogs() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Blog> allBlogs = blogRepo.findAll();
+		List<BlogDto> blogs = new ArrayList<>();
+		for(Blog blog: allBlogs) {
+			blogs.add(this.blogToBlogDto(blog));
+		}		
+		return blogs;
 	}
 
+	
+	//get blogs by user id
 	@Override
-	public List<BlogDto> getAllBlogsByUser() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BlogDto> getAllBlogsByUser(int userId) {
+		User user = userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
+
+		List<Blog> allBlogs = blogRepo.findByUser(user);
+		List<BlogDto> blogs = new ArrayList<>();
+		for(Blog blog: allBlogs) {
+			blogs.add(this.blogToBlogDto(blog));
+		}		
+		return blogs;
 	}
 
+	//get blogs by category id
 	@Override
-	public List<BlogDto> getAllBlogsByCategory() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BlogDto> getAllBlogsByCategory(int catId) {		
+		Category category = categoryRepo.findById(catId).orElseThrow(()-> new ResourceNotFoundException("Category", "category id",catId));
+		
+		List<Blog> allBlogs = blogRepo.findByCategory(category);
+		List<BlogDto> blogs = new ArrayList<>();
+		for(Blog blog: allBlogs) {
+			blogs.add(this.blogToBlogDto(blog));
+		}	
+		
+		return blogs;
 	}
 	
 	

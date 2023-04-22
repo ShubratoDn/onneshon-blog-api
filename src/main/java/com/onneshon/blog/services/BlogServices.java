@@ -13,7 +13,7 @@ public interface BlogServices {
 	BlogDto updateBlog(BlogDto blog, int blogId);
 	
 	//delete blog
-	void deletBlog(int blogId);
+	void deleteBlog(int blogId);
 	
 	//get blog by id
 	BlogDto getBlogById(int blogId);
@@ -22,8 +22,8 @@ public interface BlogServices {
 	List<BlogDto> getAllBlogs();
 	
 	//get all blogs by User
-	List<BlogDto> getAllBlogsByUser();
+	List<BlogDto> getAllBlogsByUser(int userId);
 	
 	//get all Blogs by category id
-	List<BlogDto> getAllBlogsByCategory();
+	List<BlogDto> getAllBlogsByCategory(int catId);
 }

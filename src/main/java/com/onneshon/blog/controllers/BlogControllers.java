@@ -1,11 +1,13 @@
 package com.onneshon.blog.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -98,6 +100,37 @@ public class BlogControllers {
 		BlogDto updateBlog = blogServices.updateBlog(blogDto, blogId);
 		return ResponseEntity.ok(updateBlog);
 	}
+	
+	
+	//get blog by id
+	@GetMapping("/blog/{blogId}")	
+	public ResponseEntity<?> getBlogById(@PathVariable int blogId){
+		BlogDto blog = blogServices.getBlogById(blogId);
+		return ResponseEntity.ok(blog);
+	}
+	
+	
+	//get all blog
+	@GetMapping("/blogs")	
+	public ResponseEntity<?> getAllBlogs(){
+		List<BlogDto> allBlogs = blogServices.getAllBlogs();
+		return ResponseEntity.ok(allBlogs);
+	}
+	
+	//get blogs by user
+	@GetMapping("/user/{userId}/blogs")	
+	public ResponseEntity<?> getBlogsByUser(@PathVariable int userId){
+		List<BlogDto> allBlogs = blogServices.getAllBlogsByUser(userId);
+		return ResponseEntity.ok(allBlogs);
+	}
+	
+	//get blogs by category
+	@GetMapping("/category/{catId}/blogs")	
+	public ResponseEntity<?> getBlogsByCategory(@PathVariable int catId){
+		List<BlogDto> allBlogs = blogServices.getAllBlogsByCategory(catId);
+		return ResponseEntity.ok(allBlogs);
+	}
+	
 	
 	
 }
