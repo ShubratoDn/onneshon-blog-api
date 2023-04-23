@@ -175,13 +175,27 @@ public class BlogServicesImple implements BlogServices{
 		List<BlogDto> blogs = new ArrayList<>();
 		for(Blog blog: allBlogs) {
 			blogs.add(this.blogToBlogDto(blog));
-		}		
-		return blogs;
+		}	
+		
+		
+		PageResponse pageData = new PageResponse();
+		pageData.setContent(blogs);
+		pageData.setPageNumber(pageInfo.getNumber());
+		pageData.setPageSize(pageInfo.getSize());
+		pageData.setTotalElements(pageInfo.getTotalElements());
+		pageData.setTotalPages(pageInfo.getTotalPages());
+		pageData.setNumberOfElements(pageInfo.getNumberOfElements());
+		
+		pageData.setEmpty(pageInfo.isEmpty());
+		pageData.setFirst(pageInfo.isFirst());
+		pageData.setLast(pageInfo.isLast());
+		
+		return pageData;
 	}
 
 	//get blogs by category id
 	@Override
-	public List<BlogDto> getAllBlogsByCategory(int catId, int pageNumber, int pageSize, String sortBy, String sortDirection) {		
+	public PageResponse getAllBlogsByCategory(int catId, int pageNumber, int pageSize, String sortBy, String sortDirection) {		
 		Category category = categoryRepo.findById(catId).orElseThrow(()-> new ResourceNotFoundException("Category", "category id",catId));
 		
 		
@@ -198,22 +212,39 @@ public class BlogServicesImple implements BlogServices{
 		Page<Blog> pageInfo;
 		try {
 			Pageable page = PageRequest.of(pageNumber, pageSize, sort);
-			pageInfo = blogRepo.findAll(page);
+			pageInfo = blogRepo.findByCategory(category,page);
 		} catch (Exception e) {
 			// jodi sort by er value incorrect hoy tahole eta cholbe
 			Pageable page = PageRequest.of(pageNumber, pageSize, Sort.by("id").descending());
-			pageInfo = blogRepo.findAll(page);
+			pageInfo = blogRepo.findByCategory(category,page);
 		}
 		
 		
-		List<Blog> allBlogs = blogRepo.findByCategory(category);
+		List<Blog> allBlogs = pageInfo.getContent();
+		
 		List<BlogDto> blogs = new ArrayList<>();
 		for(Blog blog: allBlogs) {
 			blogs.add(this.blogToBlogDto(blog));
 		}	
 		
-		return blogs;
+		
+		
+		PageResponse pageData = new PageResponse();
+		pageData.setContent(blogs);
+		pageData.setPageNumber(pageInfo.getNumber());
+		pageData.setPageSize(pageInfo.getSize());
+		pageData.setTotalElements(pageInfo.getTotalElements());
+		pageData.setTotalPages(pageInfo.getTotalPages());
+		pageData.setNumberOfElements(pageInfo.getNumberOfElements());
+		
+		pageData.setEmpty(pageInfo.isEmpty());
+		pageData.setFirst(pageInfo.isFirst());
+		pageData.setLast(pageInfo.isLast());
+		
+		return pageData;
 	}
+	
+	
 	
 	
 	

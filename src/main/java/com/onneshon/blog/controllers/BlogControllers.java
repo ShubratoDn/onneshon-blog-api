@@ -1,7 +1,6 @@
 package com.onneshon.blog.controllers;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -134,15 +133,21 @@ public class BlogControllers {
 			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
 			){
 		
-		List<BlogDto> allBlogs = blogServices.getAllBlogsByUser(userId);
+		PageResponse allBlogs = blogServices.getAllBlogsByUser(userId, pageNumber, pageSize, sortBy, sortDirection);
 		return ResponseEntity.ok(allBlogs);
 		
 	}
 	
 	//get blogs by category
 	@GetMapping("/category/{catId}/blogs")	
-	public ResponseEntity<?> getBlogsByCategory(@PathVariable int catId){
-		List<BlogDto> allBlogs = blogServices.getAllBlogsByCategory(catId);
+	public ResponseEntity<?> getBlogsByCategory(
+			@PathVariable int catId,
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
+			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
+			){
+		 PageResponse allBlogs = blogServices.getAllBlogsByCategory(catId, pageNumber, pageSize, sortBy, sortDirection);
 		return ResponseEntity.ok(allBlogs);
 	}
 	
