@@ -130,6 +130,20 @@ public class UserServicesImple implements UserServices {
 		
 		return userDtoSecure;
 	}
+
+	//user to user dto secure
+	public User userDtoSecureToUser(UserDtoSecure userDtoSecure) {
+		
+		User user = new User();	
+		
+		user.setId(userDtoSecure.getId());
+		user.setName(userDtoSecure.getName());
+		user.setAbout(userDtoSecure.getAbout());
+		user.setImage(userDtoSecure.getImage());
+		
+		return user;
+	}
+	
 	
 	
 	

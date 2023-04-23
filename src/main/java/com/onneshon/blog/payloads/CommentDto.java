@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CommentDto {
 
-	private int id;
+	private int commentId;
 	
 	@NotEmpty(message = "Write Something!")
 	private String content;
