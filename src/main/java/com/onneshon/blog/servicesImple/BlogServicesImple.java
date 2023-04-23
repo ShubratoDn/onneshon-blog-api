@@ -2,11 +2,16 @@ package com.onneshon.blog.servicesImple;
 
 
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.onneshon.blog.entities.Blog;
@@ -14,6 +19,7 @@ import com.onneshon.blog.entities.Category;
 import com.onneshon.blog.entities.User;
 import com.onneshon.blog.exceptions.ResourceNotFoundException;
 import com.onneshon.blog.payloads.BlogDto;
+import com.onneshon.blog.payloads.PageResponse;
 import com.onneshon.blog.repositories.BlogRepo;
 import com.onneshon.blog.repositories.CategoryRepo;
 import com.onneshon.blog.repositories.UserRepo;
@@ -93,23 +99,79 @@ public class BlogServicesImple implements BlogServices{
 	
 	//get all blogs
 	@Override
-	public List<BlogDto> getAllBlogs() {
+	public PageResponse getAllBlogs(int pageNumber, int pageSize, String sortBy, String sortDirection) {		
 		
-		List<Blog> allBlogs = blogRepo.findAll();
+		Sort sort = null;
+		if(sortDirection.equalsIgnoreCase("asc")) {
+			sort = Sort.by(sortBy).ascending();
+		}else {
+			sort = Sort.by(sortBy).descending();
+		}
+		
+		//STEP pagable	
+		Page<Blog> pageInfo;
+		try {
+			Pageable page = PageRequest.of(pageNumber, pageSize,sort);
+			 pageInfo = blogRepo.findAll(page);			
+		} catch (Exception e) {
+			//jodi sort by er value incorrect hoy tahole eta cholbe
+			Pageable page = PageRequest.of(pageNumber, pageSize,Sort.by("id").descending());
+			 pageInfo = blogRepo.findAll(page);
+		}
+		
+		List<Blog> allBlogs = pageInfo.getContent();	
+
 		List<BlogDto> blogs = new ArrayList<>();
 		for(Blog blog: allBlogs) {
 			blogs.add(this.blogToBlogDto(blog));
-		}		
-		return blogs;
+		}
+		
+		
+		PageResponse pageData = new PageResponse();
+		pageData.setContent(blogs);
+		pageData.setPageNumber(pageInfo.getNumber());
+		pageData.setPageSize(pageInfo.getSize());
+		pageData.setTotalElements(pageInfo.getTotalElements());
+		pageData.setTotalPages(pageInfo.getTotalPages());
+		pageData.setNumberOfElements(pageInfo.getNumberOfElements());
+		
+		pageData.setEmpty(pageInfo.isEmpty());
+		pageData.setFirst(pageInfo.isFirst());
+		pageData.setLast(pageInfo.isLast());
+		
+		return pageData;
 	}
 
 	
+	
 	//get blogs by user id
 	@Override
-	public List<BlogDto> getAllBlogsByUser(int userId) {
+	public PageResponse getAllBlogsByUser(int userId, int pageNumber, int pageSize, String sortBy, String sortDirection) {
 		User user = userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
 
-		List<Blog> allBlogs = blogRepo.findByUser(user);
+		Sort sort = null;
+		if(sortDirection.equalsIgnoreCase("asc")) {
+			sort = Sort.by(sortBy).ascending();
+		}else {
+			sort = Sort.by(sortBy).descending();
+		}
+		
+		
+		// STEP pagable
+		Page<Blog> pageInfo;
+		try {
+			Pageable page = PageRequest.of(pageNumber, pageSize, sort);
+			pageInfo = blogRepo.findByUser(user,page);
+		} catch (Exception e) {
+			// jodi sort by er value incorrect hoy tahole eta cholbe
+			Pageable page = PageRequest.of(pageNumber, pageSize, Sort.by("id").descending());
+			pageInfo = blogRepo.findByUser(user,page);
+		}	
+		
+		
+		List<Blog> allBlogs = pageInfo.getContent();
+		
+		
 		List<BlogDto> blogs = new ArrayList<>();
 		for(Blog blog: allBlogs) {
 			blogs.add(this.blogToBlogDto(blog));
@@ -119,8 +181,30 @@ public class BlogServicesImple implements BlogServices{
 
 	//get blogs by category id
 	@Override
-	public List<BlogDto> getAllBlogsByCategory(int catId) {		
+	public List<BlogDto> getAllBlogsByCategory(int catId, int pageNumber, int pageSize, String sortBy, String sortDirection) {		
 		Category category = categoryRepo.findById(catId).orElseThrow(()-> new ResourceNotFoundException("Category", "category id",catId));
+		
+		
+		Sort sort = null;
+		if(sortDirection.equalsIgnoreCase("asc")) {
+			sort = Sort.by(sortBy).ascending();
+		}else {
+			sort = Sort.by(sortBy).descending();
+		}
+		
+		
+		
+		// STEP pagable
+		Page<Blog> pageInfo;
+		try {
+			Pageable page = PageRequest.of(pageNumber, pageSize, sort);
+			pageInfo = blogRepo.findAll(page);
+		} catch (Exception e) {
+			// jodi sort by er value incorrect hoy tahole eta cholbe
+			Pageable page = PageRequest.of(pageNumber, pageSize, Sort.by("id").descending());
+			pageInfo = blogRepo.findAll(page);
+		}
+		
 		
 		List<Blog> allBlogs = blogRepo.findByCategory(category);
 		List<BlogDto> blogs = new ArrayList<>();

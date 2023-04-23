@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.BlogDto;
+import com.onneshon.blog.payloads.PageResponse;
 import com.onneshon.blog.payloads.ValidationResponse;
 import com.onneshon.blog.services.BlogServices;
 import com.onneshon.blog.services.FileService;
@@ -112,16 +113,30 @@ public class BlogControllers {
 	
 	//get all blog
 	@GetMapping("/blogs")	
-	public ResponseEntity<?> getAllBlogs(){
-		List<BlogDto> allBlogs = blogServices.getAllBlogs();
+	public ResponseEntity<?> getAllBlogs(
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
+			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
+			){	
+		
+		PageResponse allBlogs = blogServices.getAllBlogs(pageNumber, pageSize, sortBy, sortDirection);
 		return ResponseEntity.ok(allBlogs);
 	}
 	
 	//get blogs by user
 	@GetMapping("/user/{userId}/blogs")	
-	public ResponseEntity<?> getBlogsByUser(@PathVariable int userId){
+	public ResponseEntity<?> getBlogsByUser(
+			@PathVariable int userId,
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
+			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
+			){
+		
 		List<BlogDto> allBlogs = blogServices.getAllBlogsByUser(userId);
 		return ResponseEntity.ok(allBlogs);
+		
 	}
 	
 	//get blogs by category

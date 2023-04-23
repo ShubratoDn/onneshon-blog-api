@@ -3,6 +3,7 @@ package com.onneshon.blog.services;
 import java.util.List;
 
 import com.onneshon.blog.payloads.BlogDto;
+import com.onneshon.blog.payloads.PageResponse;
 
 public interface BlogServices {
 
@@ -19,11 +20,11 @@ public interface BlogServices {
 	BlogDto getBlogById(int blogId);
 	
 	//get all blogs
-	List<BlogDto> getAllBlogs();
+	PageResponse getAllBlogs(int pageNumber, int pageSize, String sortBy, String sortDirection);
 	
 	//get all blogs by User
-	List<BlogDto> getAllBlogsByUser(int userId);
+	PageResponse getAllBlogsByUser(int userId, int pageNumber, int pageSize, String sortBy, String sortDirection);
 	
 	//get all Blogs by category id
-	List<BlogDto> getAllBlogsByCategory(int catId);
+	PageResponse getAllBlogsByCategory(int catId, int pageNumber, int pageSize, String sortBy, String sortDirection);
 }
