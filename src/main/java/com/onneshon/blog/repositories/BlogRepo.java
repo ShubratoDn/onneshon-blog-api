@@ -20,4 +20,8 @@ public interface BlogRepo extends JpaRepository<Blog, Integer>{
 	Page<Blog> findByUser(User user, Pageable page);
 	
 	Page<Blog> findByCategory(Category category,  Pageable page);
+	
+	Page<Blog> findByBlogTitleContaining(String search_query, Pageable page);
+	
+	
 }

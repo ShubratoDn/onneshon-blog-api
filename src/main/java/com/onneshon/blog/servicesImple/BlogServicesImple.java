@@ -248,6 +248,57 @@ public class BlogServicesImple implements BlogServices{
 	
 	
 	
+	//search blogs
+	@Override
+	public PageResponse searchBlogs(String search_query, int pageNumber, int pageSize, String sortBy, String sortDirection) {
+		
+		Sort sort = null;
+		if(sortDirection.equalsIgnoreCase("asc")) {
+			sort = Sort.by(sortBy).ascending();
+		}else {
+			sort = Sort.by(sortBy).descending();
+		}
+		
+		
+		//if search query te kono value na ashe taile kono kichu jeno show na kore
+		if(search_query.isEmpty()){
+			search_query = null;
+		}
+		
+		
+		Pageable page = PageRequest.of(pageNumber, pageSize, sort);
+		Page<Blog> pageInfo = blogRepo.findByBlogTitleContaining(search_query, page);
+
+		
+		List<Blog> allBlogs = pageInfo.getContent();
+
+		List<BlogDto> blogs = new ArrayList<>();
+		for (Blog blog : allBlogs) {
+			blogs.add(this.blogToBlogDto(blog));
+		}
+
+		PageResponse pageData = new PageResponse();
+		pageData.setContent(blogs);
+		pageData.setPageNumber(pageInfo.getNumber());
+		pageData.setPageSize(pageInfo.getSize());
+		pageData.setTotalElements(pageInfo.getTotalElements());
+		pageData.setTotalPages(pageInfo.getTotalPages());
+		pageData.setNumberOfElements(pageInfo.getNumberOfElements());
+
+		pageData.setEmpty(pageInfo.isEmpty());
+		pageData.setFirst(pageInfo.isFirst());
+		pageData.setLast(pageInfo.isLast());
+
+		return pageData;
+	}
+
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -270,7 +321,8 @@ public class BlogServicesImple implements BlogServices{
 		
 	}
 	
-	
+
+
 	public BlogDto blogToBlogDto(Blog blog) {
 		BlogDto blogDto = new BlogDto();
 		

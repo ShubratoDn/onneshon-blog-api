@@ -153,4 +153,27 @@ public class BlogControllers {
 	
 	
 	
+	
+	
+	
+	//search query
+	@GetMapping("/blogs/results")
+	public ResponseEntity<?> searchForBlog(
+			@RequestParam(value = "search_query", defaultValue = "", required = false) String search_query,
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
+			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
+			){
+		
+		PageResponse blogs = blogServices.searchBlogs(search_query, pageNumber, pageSize, sortBy, sortDirection);
+		
+		return ResponseEntity.ok(blogs);
+	}
+	
+	
+	
+	
+	
+	
 }

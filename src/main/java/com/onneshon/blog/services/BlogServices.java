@@ -25,4 +25,9 @@ public interface BlogServices {
 	
 	//get all Blogs by category id
 	PageResponse getAllBlogsByCategory(int catId, int pageNumber, int pageSize, String sortBy, String sortDirection);
+	
+	//search blog
+	PageResponse searchBlogs(String search_query, int pageNumber, int pageSize, String sortBy, String sortDirection);
+	
 }
+
