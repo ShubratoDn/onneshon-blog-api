@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -52,6 +53,11 @@ public class User {
 	private List<Comment> comments = new ArrayList<>();
 	
 	
+	
+	//role er jonno Many to Many relationship
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	//@JoinTable(name = "user_role", joinColumns = @JoinColumn(name="user"), inverseJoinColumns = @JoinColumn(name="role"))
+	private List<Role> roles= new ArrayList<>();
 	
 	
 }
