@@ -1,4 +1,4 @@
-package com.onneshon.blog.jwt;
+package com.onneshon.blog.configs.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
