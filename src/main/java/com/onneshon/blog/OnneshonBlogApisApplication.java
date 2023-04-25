@@ -17,6 +17,7 @@ public class OnneshonBlogApisApplication implements CommandLineRunner{
 	public static void main(String[] args) {		
 		SpringApplication.run(OnneshonBlogApisApplication.class, args);
 		
+		//ekhane o use kora jay...but static method hote hobe
 //		myPasswordEncoder.encode();
 	}
 
