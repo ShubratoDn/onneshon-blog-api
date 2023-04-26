@@ -7,8 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,36 +35,36 @@ public class AuthController {
 	public ResponseEntity<?> loginUser(@RequestBody JwtLoginRequest userInfo) throws Exception{
 	
 		String userName = userInfo.getUserName();
-		String password = userInfo.getPassword();
+		String password = userInfo.getPassword();		
 		
 		//authentication kortesi j User er password thik ache ki na
 		this.authenticate(userName, password);
 		
-		
+		//sob thik ache ekhane
 		String token = jwtUtil.generateToken(userDetailServiceImple.loadUserByUsername(userName));
 		
 		JwtAuthResponse response = new JwtAuthResponse(token);
+		
+//		System.out.println("User Name from token " + jwtUtil.extractUsername(token));
 		
 		return ResponseEntity.ok(response);
 		
 	}
 	
 	
+	
+	//User name r password valid ki na check kore;
 	private void authenticate(String userName, String password) throws Exception {		
 		try {			
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
-			System.out.println("workign 1");
 		}catch (DisabledException e) {
-			System.out.println("workign 2");
 			throw new Exception("User Disabled", e);
 		}catch (BadCredentialsException e) {
-			System.out.println("workign 3");
 			throw new Exception("Bad Credential", e);
 		}catch (InternalAuthenticationServiceException e) {
-			System.out.println("workign 5");
-			throw new Exception("Bad Credential", e);
+			throw new UsernameNotFoundException("Invalid UserName!", e);
+			//throw new BadCredentialsException("Username or Password Invalid!", e);
 		}
-		System.out.println("workign 4");
 	}
 	
 }

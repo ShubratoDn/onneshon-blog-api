@@ -1,5 +1,4 @@
 package com.onneshon.blog.configs.jwt;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,12 +13,16 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-    private String SECRET_KEY = "secret";
+    private String SECRET_KEY = "myDhun";
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, Claims::getSubject);        
     }
     
+    public String getUsernameFromToken(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
+    }
+
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }

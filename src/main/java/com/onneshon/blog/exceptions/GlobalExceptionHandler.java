@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -61,6 +63,35 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
 	}
+	
+	
+	
+	//BadCredentialsException
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<Map<String, String>> handelBadCredentialsException(
+			BadCredentialsException ex) {
+
+		Map<String, String> response = new HashMap<>();		
+
+		response.put("BadCredentials", ex.getMessage());
+		
+		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+	}
+	
+	
+	
+	//User Not Found Exception
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public ResponseEntity<Map<String, String>> handelUsernameNotFoundException(
+			UsernameNotFoundException ex) {
+
+		Map<String, String> response = new HashMap<>();		
+
+		response.put("UserNotFound", ex.getMessage());
+		
+		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+	}
+	
 	
 	
 }

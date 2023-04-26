@@ -42,11 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		if(reqToken != null && reqToken.startsWith("Bearer ")) {		
 			token = reqToken.substring(7);			
 			//token theke user name fetch korte hobe
-			try {
-				
+			try {				
 				//userName= jwtUtil.extractUsername(token);
 				userName= jwtUtil.extractUsername(token);
-				
+				System.out.println("User name is : " + userName);
 				
 			} catch (IllegalArgumentException  e) {
 				System.out.println("Unable to get JWT token (Filter Class theke)");
@@ -63,15 +62,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			System.out.println("Token is : " + reqToken);
 		}
 		
-		System.out.println("Filter WORKING 2");
 		
 		//VALIDATING THE TOKEN		
 		if(userName!= null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			System.out.println("Filter WORKING 3");
+			
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-			System.out.println("Filter WORKING 4");
+			
 			if(jwtUtil.validateToken(token, userDetails)) {
-				System.out.println("Filter WORKING 5");
+				
 				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
 				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				

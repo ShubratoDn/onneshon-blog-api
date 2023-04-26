@@ -8,12 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -85,10 +82,11 @@ public class SecurityConfig {
 	
 	
 	//JWT STEP
-	//eta kaj hocche User login er 
+	//eta kaj hocche User login er somoy validation korbe
 //	@Bean
+	//eta o kaj kore
 //	AuthenticationManager authenticationManagerBean () throws Exception {
-//		return new AuthenticationManager() {			
+//		return new AuthenticationManager() {
 //			@Override
 //			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 //				// TODO Auto-generated method stub
@@ -96,9 +94,8 @@ public class SecurityConfig {
 //			}
 //		};
 //	}
-//	
 	
-
+	//FROM CHAT GPT
  	@Bean
     public AuthenticationManager authenticationManager() {
         ProviderManager providerManager = new ProviderManager(Collections.singletonList(authenticationProvider()));
