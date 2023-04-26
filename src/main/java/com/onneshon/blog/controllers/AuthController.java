@@ -5,7 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,11 +54,18 @@ public class AuthController {
 	private void authenticate(String userName, String password) throws Exception {		
 		try {			
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
+			System.out.println("workign 1");
 		}catch (DisabledException e) {
+			System.out.println("workign 2");
 			throw new Exception("User Disabled", e);
 		}catch (BadCredentialsException e) {
+			System.out.println("workign 3");
+			throw new Exception("Bad Credential", e);
+		}catch (InternalAuthenticationServiceException e) {
+			System.out.println("workign 5");
 			throw new Exception("Bad Credential", e);
 		}
+		System.out.println("workign 4");
 	}
 	
 }

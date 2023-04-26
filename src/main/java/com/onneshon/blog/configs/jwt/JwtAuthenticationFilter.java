@@ -33,18 +33,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		String reqToken = request.getHeader("Authentication");
+		String reqToken = request.getHeader("Authorization");
 		
 		String userName= null;
 		String token = null;
 		
 		//jodi token null na hoy 
-		if(reqToken!= null && reqToken.startsWith("Bearer")) {		
+		if(reqToken != null && reqToken.startsWith("Bearer ")) {		
 			token = reqToken.substring(7);			
 			//token theke user name fetch korte hobe
 			try {
 				
+				//userName= jwtUtil.extractUsername(token);
 				userName= jwtUtil.extractUsername(token);
+				
 				
 			} catch (IllegalArgumentException  e) {
 				System.out.println("Unable to get JWT token (Filter Class theke)");
@@ -52,19 +54,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 				System.out.println("JWT token has Expired (Filter Class theke)");
 			}catch (MalformedJwtException e) {
 				System.out.println("Invalid JWT (from Filter Class)");
+			}catch(Exception e) {
+				System.out.println("USER NAME EXTRACT HOYNA");
 			}
 			
 		}else {			
-			System.out.println("Bearer theke start hoyni token ta (from Filter Class)");	
+			System.out.println("Bearer diye start hoyni token ta (from Filter Class)");	
+			System.out.println("Token is : " + reqToken);
 		}
 		
+		System.out.println("Filter WORKING 2");
 		
 		//VALIDATING THE TOKEN		
 		if(userName!= null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			
-			UserDetails userDetails = userDetailsService.loadUserByUsername(userName);			
+			System.out.println("Filter WORKING 3");
+			UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+			System.out.println("Filter WORKING 4");
 			if(jwtUtil.validateToken(token, userDetails)) {
-				
+				System.out.println("Filter WORKING 5");
 				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
 				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				

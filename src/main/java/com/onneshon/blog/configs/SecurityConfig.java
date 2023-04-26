@@ -1,11 +1,14 @@
 package com.onneshon.blog.configs;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.onneshon.blog.configs.jwt.JwtAuthenticationEntryPoint;
 import com.onneshon.blog.configs.jwt.JwtAuthenticationFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -35,8 +39,11 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http.cors().and().csrf().disable()
-		.authorizeHttpRequests().anyRequest().authenticated()
-		.and()
+		.authorizeHttpRequests(auth ->
+				auth.
+					requestMatchers("/api/v1/auth/login").permitAll()
+					.anyRequest().authenticated()
+				)		
 		//JWT Config er somoy korsi eta
 		.exceptionHandling().authenticationEntryPoint(authEntryPoint)
 		.and()
@@ -44,12 +51,12 @@ public class SecurityConfig {
 //		.and().httpBasic() //basic login er jonno
 		
 		
-		//JWT STEP :
-		http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
-		
 		
 		//step 5: http ke boltesi j Data authentication hobe Database theke
 		http.authenticationProvider(this.authenticationProvider());
+		
+		//JWT STEP :
+		http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		
 		DefaultSecurityFilterChain myConfigure = http.build();
@@ -79,16 +86,24 @@ public class SecurityConfig {
 	
 	//JWT STEP
 	//eta kaj hocche User login er 
-	@Bean
-	AuthenticationManager authenticationManagerBean () throws Exception {
-		return new AuthenticationManager() {			
-			@Override
-			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-	}
+//	@Bean
+//	AuthenticationManager authenticationManagerBean () throws Exception {
+//		return new AuthenticationManager() {			
+//			@Override
+//			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+//		};
+//	}
+//	
 	
+
+ 	@Bean
+    public AuthenticationManager authenticationManager() {
+        ProviderManager providerManager = new ProviderManager(Collections.singletonList(authenticationProvider()));
+        return providerManager;
+    }
+
 
 }
