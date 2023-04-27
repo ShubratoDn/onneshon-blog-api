@@ -1,5 +1,10 @@
 package com.onneshon.blog.payloads;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.onneshon.blog.entities.Role;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -30,6 +35,8 @@ public class UserDto {
 	@Size(max = 999, message = "Maximum 1000 characters allowed")
 	private String about;
 
+	private List<Role> roles =  new ArrayList<>();
+	
 	@Override
 	public String toString() {
 		return "UserDto [id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + ", image="

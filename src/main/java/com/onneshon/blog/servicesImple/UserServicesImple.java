@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.onneshon.blog.configs.AppConstants;
+import com.onneshon.blog.entities.Role;
 import com.onneshon.blog.entities.User;
 import com.onneshon.blog.exceptions.ResourceNotFoundException;
 import com.onneshon.blog.payloads.UserDto;
 import com.onneshon.blog.payloads.UserDtoSecure;
+import com.onneshon.blog.repositories.RoleRepo;
 import com.onneshon.blog.repositories.UserRepo;
 import com.onneshon.blog.services.UserServices;
 
@@ -17,7 +21,31 @@ import com.onneshon.blog.services.UserServices;
 public class UserServicesImple implements UserServices {	
 	
 	@Autowired
-	UserRepo userRepo;
+	private UserRepo userRepo;
+	
+	@Autowired
+	private RoleRepo roleRepo;
+	
+	@Autowired
+	private PasswordEncoder passEncoder;
+	
+	
+	
+	//REGISTER USER
+	@Override
+	public UserDto registerUser(UserDto userDto) {		
+		User user = this.userDtoToUser(userDto);
+		
+		Role role = roleRepo.findById(AppConstants.ROLE_NORMAL).get();
+		
+		user.getRoles().add(role);		
+		user.setPassword(passEncoder.encode(user.getPassword()));
+		
+		User addedUser= userRepo.save(user);
+		
+		return userToUserDto(addedUser);
+	}
+	
 	
 	
 	//adding new User
@@ -88,6 +116,15 @@ public class UserServicesImple implements UserServices {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//user to userDto 
 	public UserDto userToUserDto(User user) {
 		
@@ -99,6 +136,7 @@ public class UserServicesImple implements UserServices {
 		userDto.setPassword(user.getPassword());
 		userDto.setAbout(user.getAbout());
 		userDto.setImage(user.getImage());	
+		userDto.setRoles(user.getRoles());
 		
 		return userDto;
 	}
@@ -114,6 +152,7 @@ public class UserServicesImple implements UserServices {
 		user.setPassword(userDto.getPassword());
 		user.setAbout(userDto.getAbout());
 		user.setImage(userDto.getImage());
+		user.setRoles(userDto.getRoles());
 		
 		return user;	
 	}

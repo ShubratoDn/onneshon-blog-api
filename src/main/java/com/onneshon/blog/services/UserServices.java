@@ -6,6 +6,10 @@ import com.onneshon.blog.payloads.UserDto;
 
 public interface UserServices {
 
+	//register New User
+	UserDto registerUser(UserDto user);
+	
+	
 	//adding new user
 	UserDto addUser(UserDto user);
 	

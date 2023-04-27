@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +28,6 @@ import com.onneshon.blog.services.FileService;
 import com.onneshon.blog.services.UserServices;
 import com.onneshon.blog.servicesImple.FileServicesImple;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
 import jakarta.validation.Validation;
@@ -134,10 +132,10 @@ public class UserControllers {
 		return ResponseEntity.ok(user);
 	}
 
-	// get all user by id
+	// get all user 
 	@GetMapping("/users/")
 	public ResponseEntity<List<UserDto>> getAllUser() {
-		List<UserDto> allUser = userServices.getAllUser();
+		List<UserDto> allUser = userServices.getAllUser();		
 		return ResponseEntity.ok(allUser);
 	}
 

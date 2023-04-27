@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,6 +25,7 @@ import com.onneshon.blog.configs.jwt.JwtAuthenticationFilter;
 import com.onneshon.blog.exceptions.CustomAccessDeniedHandler;
 
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -43,7 +45,8 @@ public class SecurityConfig {
 		.authorizeHttpRequests(auth ->
 				auth.
 					requestMatchers("/api/v1/auth/login").permitAll()
-					.anyRequest().authenticated()
+					.requestMatchers(HttpMethod.GET).permitAll()
+					.anyRequest().authenticated()					
 				)		
 		//JWT Config er somoy korsi eta
 		.exceptionHandling().authenticationEntryPoint(authEntryPoint)
