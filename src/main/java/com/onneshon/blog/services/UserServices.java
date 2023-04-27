@@ -3,11 +3,12 @@ package com.onneshon.blog.services;
 import java.util.List;
 
 import com.onneshon.blog.payloads.UserDto;
+import com.onneshon.blog.payloads.UserDtoSecure;
 
 public interface UserServices {
 
 	//register New User
-	UserDto registerUser(UserDto user);
+	UserDtoSecure registerUser(UserDto user);
 	
 	
 	//adding new user
@@ -21,6 +22,9 @@ public interface UserServices {
 	
 	//get user by id
 	UserDto getUserById(int userId);
+	
+	UserDto getUserByEmail(String email);
+	
 	
 	//get all user
 	List<UserDto>  getAllUser();

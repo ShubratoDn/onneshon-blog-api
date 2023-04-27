@@ -1,5 +1,9 @@
 package com.onneshon.blog.payloads;
 
+import java.util.List;
+
+import com.onneshon.blog.entities.Role;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -21,4 +25,7 @@ public class UserDtoSecure {
 	
 	@Size(max = 999, message = "Maximum 1000 characters allowed")
 	private String about;
+	
+	private List<Role> roles;
+	
 }

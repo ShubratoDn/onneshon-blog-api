@@ -55,7 +55,7 @@ public class User {
 	
 	
 	//role er jonno Many to Many relationship
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	//@JoinTable(name = "user_role", joinColumns = @JoinColumn(name="user"), inverseJoinColumns = @JoinColumn(name="role"))
 	private List<Role> roles= new ArrayList<>();
 	

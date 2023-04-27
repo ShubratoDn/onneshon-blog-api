@@ -3,6 +3,7 @@ package com.onneshon.blog.payloads;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.onneshon.blog.entities.Role;
 
 import jakarta.validation.constraints.Email;

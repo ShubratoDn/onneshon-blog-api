@@ -33,7 +33,7 @@ public class UserServicesImple implements UserServices {
 	
 	//REGISTER USER
 	@Override
-	public UserDto registerUser(UserDto userDto) {		
+	public UserDtoSecure registerUser(UserDto userDto) {		
 		User user = this.userDtoToUser(userDto);
 		
 		Role role = roleRepo.findById(AppConstants.ROLE_NORMAL).get();
@@ -43,7 +43,7 @@ public class UserServicesImple implements UserServices {
 		
 		User addedUser= userRepo.save(user);
 		
-		return userToUserDto(addedUser);
+		return userToUserDtoSecure(addedUser);
 	}
 	
 	
@@ -114,6 +114,17 @@ public class UserServicesImple implements UserServices {
 	}
 	
 	
+	//get user by email
+	public UserDto getUserByEmail(String email) {
+		User findByEmail = userRepo.findByEmail(email);
+			
+		if(findByEmail == null) {
+			UserDto userDto = null;
+			return userDto;
+		}
+		
+		return this.userToUserDto(findByEmail);
+	}
 	
 	
 	
@@ -166,6 +177,7 @@ public class UserServicesImple implements UserServices {
 		userDtoSecure.setName(user.getName());
 		userDtoSecure.setAbout(user.getAbout());
 		userDtoSecure.setImage(user.getImage());	
+		userDtoSecure.setRoles(user.getRoles());
 		
 		return userDtoSecure;
 	}
@@ -179,6 +191,7 @@ public class UserServicesImple implements UserServices {
 		user.setName(userDtoSecure.getName());
 		user.setAbout(userDtoSecure.getAbout());
 		user.setImage(userDtoSecure.getImage());
+		user.setRoles(userDtoSecure.getRoles());
 		
 		return user;
 	}

@@ -2,6 +2,7 @@ package com.onneshon.blog.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onneshon.blog.configs.UserDetailServiceImple;
 import com.onneshon.blog.configs.jwt.JwtUtil;
+import com.onneshon.blog.entities.User;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.JwtAuthResponse;
 import com.onneshon.blog.payloads.JwtLoginRequest;
 import com.onneshon.blog.payloads.UserDto;
+import com.onneshon.blog.payloads.UserDtoSecure;
 import com.onneshon.blog.payloads.ValidationResponse;
+import com.onneshon.blog.repositories.UserRepo;
 import com.onneshon.blog.services.FileService;
 import com.onneshon.blog.services.UserServices;
 import com.onneshon.blog.servicesImple.FileServicesImple;
+import com.onneshon.blog.servicesImple.UserServicesImple;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -56,7 +62,7 @@ public class AuthController {
 	@Autowired
 	private UserServices userServices;
 	
-	
+
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody JwtLoginRequest userInfo) throws Exception{
 	
@@ -104,6 +110,16 @@ public class AuthController {
 		}
 		
 		
+		//checking if user is already exist or not		
+		UserDto userByEmail = userServices.getUserByEmail(userDto.getEmail());
+		if(userByEmail != null) {
+			
+			Map<String, String> resp = new HashMap<>();
+			resp.put("message", "Email already Exist!");
+			return ResponseEntity.badRequest().body(resp);
+		}
+		
+		
 		
 		//AUTO wire korle problem hocchilo. Ager value gula dhore rakhtesilo
 		FileService fileService = new FileServicesImple();
@@ -124,9 +140,10 @@ public class AuthController {
 		 
 		 //STEP 5: Upload Data
 		 userDto.setImage(imagePath);
-		 UserDto addedUser = userServices.registerUser(userDto);		
-
-		return new ResponseEntity<UserDto>(addedUser, HttpStatus.CREATED);
+		 UserDtoSecure addedUser = userServices.registerUser(userDto);	 
+		 	
+		 
+		return new ResponseEntity<>(addedUser, HttpStatus.CREATED);
 	}
 	
 	
