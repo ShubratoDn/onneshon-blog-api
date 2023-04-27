@@ -3,6 +3,7 @@ package com.onneshon.blog.configs.jwt;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,11 +52,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 				System.out.println("Unable to get JWT token (Filter Class theke)");
 			}catch (ExpiredJwtException e) {
 				System.out.println("JWT token has Expired (Filter Class theke)");
+				
+				//throw new JwtSessionExpiredException("Heda");
+				//session expire hole msg
+				response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.setContentType("application/json");
+                String errorResponse = "{\"message\":\"Token has expired\"}";
+                response.getWriter().write(errorResponse);
+                response.getWriter().flush();
+                return;
+				
+//				response.sendError(HttpServletResponse.SC_FORBIDDEN, "Session expired");
+				
+//				throw new JwtSessionExpiredException("This Session has been expired");	
+				
 			}catch (MalformedJwtException e) {
 				System.out.println("Invalid JWT (from Filter Class)");
 			}catch(Exception e) {
 				System.out.println("USER NAME EXTRACT HOYNA");
 			}
+			
 			
 		}else {			
 			System.out.println("Bearer diye start hoyni token ta (from Filter Class)");	

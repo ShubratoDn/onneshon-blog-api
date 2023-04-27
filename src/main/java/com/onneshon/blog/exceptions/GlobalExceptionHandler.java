@@ -15,6 +15,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.jsonwebtoken.ExpiredJwtException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -92,6 +94,20 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
 	}
 	
+	
+	
+	
+	//Session Expired
+	@ExceptionHandler(JwtSessionExpiredException.class)
+	public ResponseEntity<Map<String, String>> handleJwtSessionExpiredException(
+			JwtSessionExpiredException ex) {
+
+		Map<String, String> response = new HashMap<>();		
+
+		response.put("SessionExpired", ex.getMessage());
+		
+		return new ResponseEntity<Map<String, String>>(response, HttpStatus.FORBIDDEN);
+	}
 	
 	
 }
