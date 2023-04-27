@@ -2,7 +2,6 @@ package com.onneshon.blog.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +23,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onneshon.blog.configs.UserDetailServiceImple;
 import com.onneshon.blog.configs.jwt.JwtUtil;
-import com.onneshon.blog.entities.User;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.JwtAuthResponse;
 import com.onneshon.blog.payloads.JwtLoginRequest;
 import com.onneshon.blog.payloads.UserDto;
 import com.onneshon.blog.payloads.UserDtoSecure;
 import com.onneshon.blog.payloads.ValidationResponse;
-import com.onneshon.blog.repositories.UserRepo;
 import com.onneshon.blog.services.FileService;
 import com.onneshon.blog.services.UserServices;
 import com.onneshon.blog.servicesImple.FileServicesImple;
-import com.onneshon.blog.servicesImple.UserServicesImple;
 
-import jakarta.annotation.security.PermitAll;
+
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

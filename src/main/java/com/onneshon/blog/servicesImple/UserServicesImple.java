@@ -116,7 +116,7 @@ public class UserServicesImple implements UserServices {
 	
 	//get user by email
 	public UserDto getUserByEmail(String email) {
-		User findByEmail = userRepo.findByEmail(email);
+		User findByEmail = userRepo.findByEmail(email).get();
 			
 		if(findByEmail == null) {
 			UserDto userDto = null;

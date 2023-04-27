@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -94,10 +95,19 @@ public class BlogControllers {
 		return ResponseEntity.ok(addedBlog);
 	}
 	
+	
+	
 	//update blog
 	@PutMapping("/blog/{blogId}")	
-	public ResponseEntity<?> updateBlog(@RequestBody BlogDto blogDto, @PathVariable int blogId){
+	public ResponseEntity<?> updateBlog(@RequestBody BlogDto blogDto, @PathVariable int blogId){		
 		BlogDto updateBlog = blogServices.updateBlog(blogDto, blogId);
+		
+		if(updateBlog == null) {
+			Map<String, String> resp = new HashMap<>();
+			resp.put("message", "You are not the Author of this blog!!");
+			return new ResponseEntity<>(resp, HttpStatus.FORBIDDEN);
+		}
+		
 		return ResponseEntity.ok(updateBlog);
 	}
 	

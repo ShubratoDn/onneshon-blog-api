@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.onneshon.blog.entities.Blog;
@@ -69,6 +71,17 @@ public class BlogServicesImple implements BlogServices{
 		//user, category thik ache ki na check kora hocche
 		Blog blog = blogRepo.findById(blogId).orElseThrow(()-> new ResourceNotFoundException("Blog", "BlogId", blogId));		
 //		Category category = categoryRepo.findById(blogDto.getCategoryId()).orElseThrow(()-> new ResourceNotFoundException("Category", "category id", blogDto.getCategoryId()));
+		
+		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String loggedInUserEmail = principal.getUsername();
+		String blogUser = blog.getUser().getEmail(); 
+		
+		//jodi Logged in user r blog er user match na kore taile update kora jabe na
+		if(!loggedInUserEmail.equals(blogUser)){
+			BlogDto blogDto2 = null;
+			return blogDto2;
+		}
+		
 		
 		blog.setBlogTitle(blogDto.getBlogTitle());
 		blog.setBlogContent(blogDto.getBlogContent());
