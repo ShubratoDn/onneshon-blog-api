@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,14 +16,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.onneshon.blog.configs.jwt.JwtAuthenticationEntryPoint;
 import com.onneshon.blog.configs.jwt.JwtAuthenticationFilter;
+import com.onneshon.blog.exceptions.CustomAccessDeniedHandler;
 
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 	
 	@Autowired
@@ -43,6 +47,7 @@ public class SecurityConfig {
 				)		
 		//JWT Config er somoy korsi eta
 		.exceptionHandling().authenticationEntryPoint(authEntryPoint)
+		.accessDeniedHandler(myAccessDeniedHandler())
 		.and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //		.and().httpBasic() //basic login er jonno
@@ -102,5 +107,20 @@ public class SecurityConfig {
         return providerManager;
     }
 
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	//JWT te jokhn access denied korte chaitasi 
+ 	@Bean
+ 	AccessDeniedHandler myAccessDeniedHandler() {
+ 		return new CustomAccessDeniedHandler();
+ 	}
+ 	
+ 	
 
 }
