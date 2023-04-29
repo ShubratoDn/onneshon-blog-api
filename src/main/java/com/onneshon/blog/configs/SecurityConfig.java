@@ -19,15 +19,20 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.onneshon.blog.configs.jwt.JwtAuthenticationEntryPoint;
 import com.onneshon.blog.configs.jwt.JwtAuthenticationFilter;
 import com.onneshon.blog.exceptions.CustomAccessDeniedHandler;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 
 @SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc//during api doc
+//@EnableSwagger2 //during api doc
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 	
@@ -46,6 +51,11 @@ public class SecurityConfig {
 				auth.
 					requestMatchers("/api/v1/auth/login").permitAll()
 					.requestMatchers("/api/v1/auth/register").permitAll()
+					.requestMatchers("/api/v3/api-docs").permitAll()
+					.requestMatchers("/api/v2/api-docs").permitAll()
+					.requestMatchers("/swagger-resources/**").permitAll()
+					.requestMatchers("/swagger-ui/**").permitAll()
+					.requestMatchers("/webjars/**").permitAll()
 					.requestMatchers(HttpMethod.GET).permitAll()
 					.anyRequest().authenticated()					
 				)		

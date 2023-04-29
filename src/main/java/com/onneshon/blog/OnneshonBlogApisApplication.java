@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.onneshon.blog.entities.Role;
 import com.onneshon.blog.repositories.RoleRepo;
 
+
 @SpringBootApplication
 public class OnneshonBlogApisApplication implements CommandLineRunner{
 
