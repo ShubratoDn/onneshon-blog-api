@@ -19,20 +19,20 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.onneshon.blog.configs.jwt.JwtAuthenticationEntryPoint;
 import com.onneshon.blog.configs.jwt.JwtAuthenticationFilter;
 import com.onneshon.blog.exceptions.CustomAccessDeniedHandler;
 
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 
 
 @SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
-@EnableWebMvc//during api doc
-//@EnableSwagger2 //during api doc
+
+//@EnableWebMvc//during api doc
+
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 	
