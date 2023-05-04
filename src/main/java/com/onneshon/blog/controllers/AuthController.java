@@ -13,6 +13,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,7 @@ import jakarta.validation.ValidatorFactory;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 	
 	@Autowired
@@ -108,14 +110,12 @@ public class AuthController {
 		
 		//checking if user is already exist or not		
 		UserDto userByEmail = userServices.getUserByEmail(userDto.getEmail());
-		if(userByEmail != null) {
-			
+		if(userByEmail != null) {			
 			Map<String, String> resp = new HashMap<>();
 			resp.put("message", "Email already Exist!");
 			return ResponseEntity.badRequest().body(resp);
 		}
-		
-		
+				
 		
 		//AUTO wire korle problem hocchilo. Ager value gula dhore rakhtesilo
 		FileService fileService = new FileServicesImple();

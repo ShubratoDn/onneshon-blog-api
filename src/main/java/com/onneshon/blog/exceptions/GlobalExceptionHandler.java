@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -108,6 +109,21 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseEntity<Map<String, String>>(response, HttpStatus.FORBIDDEN);
 	}
+	
+
+	
+	//multipart file send na korle
+	@ExceptionHandler(MissingServletRequestPartException.class)
+	public ResponseEntity<Map<String, String>> handleMissingServletRequestPartException(
+			MissingServletRequestPartException ex) {
+
+		Map<String, String> response = new HashMap<>();		
+
+		response.put("ImageMissing", "Please! Insert Image"+ex.getMessage());
+		
+		return new ResponseEntity<Map<String, String>>(response, HttpStatus.FORBIDDEN);
+	}
+	
 	
 	
 }

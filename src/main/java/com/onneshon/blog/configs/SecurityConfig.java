@@ -1,8 +1,10 @@
 package com.onneshon.blog.configs;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,6 +21,10 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.onneshon.blog.configs.jwt.JwtAuthenticationEntryPoint;
 import com.onneshon.blog.configs.jwt.JwtAuthenticationFilter;
@@ -134,6 +140,32 @@ public class SecurityConfig {
  	AccessDeniedHandler myAccessDeniedHandler() {
  		return new CustomAccessDeniedHandler();
  	}
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	//CORS POLICY THIK KORAR JONNO 
+ 	
+ 	//DURGESH ER REACT VIDEO
+ 	//https://www.youtube.com/watch?v=TZaWdbcMroo&list=PL0zysOflRCekAvE0nXWobPCgW0ets6s5o&index=9&t=1259s
+ 	
+// 	@Bean
+// 	public FilterRegistrationBean corsFilter() {
+// 		
+// 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+// 		
+// 		CorsConfiguration corsConfiguration = new CorsConfiguration();
+// 		corsConfiguration.setAllowCredentials(true);
+// 		
+// 		//ekhane amar url pass korbo
+// 		source.registerCorsConfiguration("/**",corsConfiguration);
+// 		
+//// 												org.springframework.web.filter.CorsFilter; 
+// 		FilterRegistrationBean register = new FilterRegistrationBean(new CorsFilter(null));
+// 		return register;
+// 	} 	
+ 	
  	
  	
 

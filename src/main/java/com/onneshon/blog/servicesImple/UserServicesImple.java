@@ -116,12 +116,16 @@ public class UserServicesImple implements UserServices {
 	
 	//get user by email
 	public UserDto getUserByEmail(String email) {
-		User findByEmail = userRepo.findByEmail(email).get();
-			
-		if(findByEmail == null) {
-			UserDto userDto = null;
-			return userDto;
-		}
+		User findByEmail = null;
+		
+		try {
+			findByEmail = userRepo.findByEmail(email).get();			
+		}catch (Exception e) {
+			if(findByEmail == null) {
+				UserDto userDto = null;
+				return userDto;
+			}
+		}	
 		
 		return this.userToUserDto(findByEmail);
 	}
