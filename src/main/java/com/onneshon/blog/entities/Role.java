@@ -3,7 +3,6 @@ package com.onneshon.blog.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +19,7 @@ public class Role {
 	@Column(name = "role",length = 20, nullable = false)	
 	private String role;
 	
-	@ManyToOne
-	private User user;
+//	@ManyToOne
+//	private User user;
 	
 }

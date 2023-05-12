@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.onneshon.blog.entities.Role;
 
 import jakarta.validation.constraints.Email;
@@ -26,6 +27,16 @@ public class UserDto {
 	
 	@Size(min = 4, message = "Minimum 4 character required")
 	private String password;
+	
+	//SET password a json ignore dile Password set kora jabe na
+	@JsonIgnore
+	public String getPassword() {
+		return this.password;
+	}	
+	@JsonProperty
+	public void setPassword(String password) {
+		 this.password = password;
+	}
 	
 	
 	@Email(message = "Invalid Email")

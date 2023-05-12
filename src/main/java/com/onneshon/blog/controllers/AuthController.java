@@ -12,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onneshon.blog.configs.UserDetailServiceImple;
 import com.onneshon.blog.configs.jwt.JwtUtil;
+import com.onneshon.blog.entities.User;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.JwtAuthResponse;
 import com.onneshon.blog.payloads.JwtLoginRequest;
@@ -33,7 +35,7 @@ import com.onneshon.blog.payloads.ValidationResponse;
 import com.onneshon.blog.services.FileService;
 import com.onneshon.blog.services.UserServices;
 import com.onneshon.blog.servicesImple.FileServicesImple;
-
+import com.onneshon.blog.servicesImple.UserServicesImple;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -60,6 +62,8 @@ public class AuthController {
 	@Autowired
 	private UserServices userServices;
 	
+	@Autowired
+	private UserServicesImple userServicesImple;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody JwtLoginRequest userInfo) throws Exception{
@@ -69,10 +73,13 @@ public class AuthController {
 		//authentication kortesi j User er password thik ache ki na
 		this.authenticate(userName, password);		
 		//sob thik ache ekhane
-		String token = jwtUtil.generateToken(userDetailServiceImple.loadUserByUsername(userName));
+		UserDetails userDetails = userDetailServiceImple.loadUserByUsername(userName);
+		String token = jwtUtil.generateToken(userDetails);
 		
-		JwtAuthResponse response = new JwtAuthResponse(token);
-	
+		JwtAuthResponse response = new JwtAuthResponse();
+		response.setToken(token);		
+		response.setUser(userServices.getUserByEmail(userName));
+		
 		return ResponseEntity.ok(response);
 		
 	}
