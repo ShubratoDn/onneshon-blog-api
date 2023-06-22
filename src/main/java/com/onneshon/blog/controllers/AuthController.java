@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onneshon.blog.configs.UserDetailServiceImple;
 import com.onneshon.blog.configs.jwt.JwtUtil;
-import com.onneshon.blog.entities.User;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.JwtAuthResponse;
 import com.onneshon.blog.payloads.JwtLoginRequest;
@@ -35,7 +34,6 @@ import com.onneshon.blog.payloads.ValidationResponse;
 import com.onneshon.blog.services.FileService;
 import com.onneshon.blog.services.UserServices;
 import com.onneshon.blog.servicesImple.FileServicesImple;
-import com.onneshon.blog.servicesImple.UserServicesImple;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -62,8 +60,6 @@ public class AuthController {
 	@Autowired
 	private UserServices userServices;
 	
-	@Autowired
-	private UserServicesImple userServicesImple;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody JwtLoginRequest userInfo) throws Exception{
@@ -80,8 +76,7 @@ public class AuthController {
 		response.setToken(token);		
 		response.setUser(userServices.getUserByEmail(userName));
 		
-		return ResponseEntity.ok(response);
-		
+		return ResponseEntity.ok(response);		
 	}
 	
 	

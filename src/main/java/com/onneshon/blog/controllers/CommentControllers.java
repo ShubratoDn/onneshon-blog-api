@@ -1,15 +1,20 @@
 package com.onneshon.blog.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.onneshon.blog.payloads.ApiResponse;
+import com.onneshon.blog.payloads.BlogDto;
 import com.onneshon.blog.payloads.CommentDto;
 import com.onneshon.blog.services.CommentServices;
 
@@ -43,6 +48,16 @@ public class CommentControllers {
 		
 	}
 	
+	
+	@GetMapping("/comment/blog/{blogId}")
+	public ResponseEntity<?> getCommentsByBlog(@PathVariable int blogId){
+		BlogDto blogDto = new BlogDto();
+		blogDto.setId(blogId);
+		
+		List<CommentDto> commentsForBlog = commentServices.getCommentsForBlog(blogDto);
+		
+		return ResponseEntity.ok(commentsForBlog);
+	}
 	
 	
 }

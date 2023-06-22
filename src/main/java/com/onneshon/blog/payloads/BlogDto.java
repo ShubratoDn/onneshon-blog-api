@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.onneshon.blog.entities.Comment;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +42,7 @@ public class BlogDto {
 //	private UserDto user;
 	private UserDtoSecure user;
 
-	private List<CommentDto> comments = new ArrayList<>();
+	private List<Comment> comments = new ArrayList<>();
 	
 	
 }

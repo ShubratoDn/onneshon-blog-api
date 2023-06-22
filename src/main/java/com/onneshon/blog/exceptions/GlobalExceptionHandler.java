@@ -126,4 +126,17 @@ public class GlobalExceptionHandler {
 	
 	
 	
+	//if user is not logged in
+	@ExceptionHandler(UserNotLoggedInException.class)
+	public ResponseEntity<Map<String, String>> handleUserNotLoggedInException(
+			UserNotLoggedInException ex) {
+
+		Map<String, String> response = new HashMap<>();		
+
+		response.put("error", ""+ex.getMessage());
+		
+		return new ResponseEntity<Map<String, String>>(response, HttpStatus.FORBIDDEN);
+	}
+	
+	
 }

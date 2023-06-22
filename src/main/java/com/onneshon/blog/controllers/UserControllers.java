@@ -108,7 +108,7 @@ public class UserControllers {
 	
 	
 	// Update New User Info
-	@PreAuthorize("hasRole('ADMIN')")
+//	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/user/{userId}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable int userId) {
 		UserDto updatedUser = userServices.updateUser(userDto, userId);
@@ -130,6 +130,7 @@ public class UserControllers {
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<UserDto> getUser(@PathVariable int userId) {
 		UserDto user = userServices.getUserById(userId);
+//		UserDto user = userServices.getUserByEmail("shubratodn44985@gmail.com");
 		return ResponseEntity.ok(user);
 	}
 

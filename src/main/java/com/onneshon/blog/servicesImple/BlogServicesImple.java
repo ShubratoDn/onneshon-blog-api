@@ -18,14 +18,17 @@ import org.springframework.stereotype.Service;
 
 import com.onneshon.blog.entities.Blog;
 import com.onneshon.blog.entities.Category;
+import com.onneshon.blog.entities.Comment;
 import com.onneshon.blog.entities.User;
 import com.onneshon.blog.exceptions.ResourceNotFoundException;
 import com.onneshon.blog.payloads.BlogDto;
+import com.onneshon.blog.payloads.CommentDto;
 import com.onneshon.blog.payloads.PageResponse;
 import com.onneshon.blog.repositories.BlogRepo;
 import com.onneshon.blog.repositories.CategoryRepo;
 import com.onneshon.blog.repositories.UserRepo;
 import com.onneshon.blog.services.BlogServices;
+import com.onneshon.blog.services.CommentServices;
 
 @Service
 public class BlogServicesImple implements BlogServices{
@@ -38,6 +41,9 @@ public class BlogServicesImple implements BlogServices{
 	
 	@Autowired
 	private BlogRepo blogRepo;
+	
+	@Autowired
+	private CommentServices commentServices;
 	
 	@Autowired
 	private CategoryServiceImple catService;
@@ -105,6 +111,17 @@ public class BlogServicesImple implements BlogServices{
 	@Override
 	public BlogDto getBlogById(int blogId) {
 		Blog blog = blogRepo.findById(blogId).orElseThrow(()-> new ResourceNotFoundException("Blog", "BlogId", blogId));
+		
+		List<CommentDto> commentsDto = commentServices.getCommentsForBlog(blogToBlogDto(blog));
+		
+		CommentServicesImple csi = new CommentServicesImple();
+		List<Comment> comments = new ArrayList<>();
+		
+		for(CommentDto com: commentsDto) {			
+			comments.add(csi.commentDtoToComment(com));
+		}		
+		blog.setComments(comments);
+		
 		return this.blogToBlogDto(blog);
 	}
 	
@@ -348,6 +365,8 @@ public class BlogServicesImple implements BlogServices{
 		
 		blogDto.setCategory(this.catService.catTocatDto(blog.getCategory()));
 		blogDto.setUser(this.userService.userToUserDtoSecure(blog.getUser()));
+
+		blogDto.setComments(blog.getComments());
 		
 		return blogDto;
 		

@@ -7,6 +7,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +23,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onneshon.blog.payloads.ApiResponse;
 import com.onneshon.blog.payloads.BlogDto;
+import com.onneshon.blog.payloads.CategoryDto;
 import com.onneshon.blog.payloads.PageResponse;
+import com.onneshon.blog.payloads.UserDto;
 import com.onneshon.blog.payloads.ValidationResponse;
 import com.onneshon.blog.services.BlogServices;
 import com.onneshon.blog.services.FileService;
+import com.onneshon.blog.services.UserServices;
 import com.onneshon.blog.servicesImple.FileServicesImple;
 
 import jakarta.validation.ConstraintViolation;
@@ -40,19 +45,27 @@ public class BlogControllers {
 	private BlogServices blogServices;
 	
 	@Autowired
+	private UserServices userServices;
+	
+	@Autowired
 	private ObjectMapper mapper;
 	
-	//add post
-	@PostMapping("/user/{userId}/blog")
+	//add Blog
+	@PostMapping("/blog")
 	public ResponseEntity<?> addBlog(
 			@RequestParam("blogData") String blogData,	
-			@RequestParam("blogImage") MultipartFile image,
-			@PathVariable int userId
+			@RequestParam("blogImage") MultipartFile image			
 			){
-		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();		
+		UserDto user = userServices.getUserByEmail(authentication.getName());
+		int userId = user.getId();
+			
 		BlogDto blog = null;
 		try {
 			blog = mapper.readValue(blogData, BlogDto.class);
+			CategoryDto category = new CategoryDto();
+			category.setCategoryId(blog.getCategoryId());
+			blog.setCategory(category);
 		} catch (JsonProcessingException e) {
 			ApiResponse resp = new ApiResponse("InvalidDataConversion", false, "Invalid Blog data");
 			return ResponseEntity.badRequest().body(resp);
@@ -127,8 +140,7 @@ public class BlogControllers {
 			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
 			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
 			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
-			){	
-		
+			){		
 		PageResponse allBlogs = blogServices.getAllBlogs(pageNumber, pageSize, sortBy, sortDirection);
 		return ResponseEntity.ok(allBlogs);
 	}

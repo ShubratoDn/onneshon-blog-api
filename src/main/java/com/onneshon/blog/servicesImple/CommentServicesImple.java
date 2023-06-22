@@ -1,5 +1,8 @@
 package com.onneshon.blog.servicesImple;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +10,7 @@ import com.onneshon.blog.entities.Blog;
 import com.onneshon.blog.entities.Comment;
 import com.onneshon.blog.entities.User;
 import com.onneshon.blog.exceptions.ResourceNotFoundException;
+import com.onneshon.blog.payloads.BlogDto;
 import com.onneshon.blog.payloads.CommentDto;
 import com.onneshon.blog.repositories.BlogRepo;
 import com.onneshon.blog.repositories.CommentRepo;
@@ -50,6 +54,20 @@ public class CommentServicesImple implements CommentServices {
 	}
 
 	
+	//get comments by blog 
+	public List<CommentDto>getCommentsForBlog(BlogDto blog){
+		Blog blog2 = new Blog();
+		blog2.setId(blog.getId());
+		
+		List<Comment> findByBlog = commentRepo.findByBlog(blog2);
+		
+		List<CommentDto> comments = new ArrayList<>();
+		for(Comment com : findByBlog) {
+			comments.add(commentToCommentDto(com));
+		}	
+		
+		return comments;
+	}
 	
 	
 	
