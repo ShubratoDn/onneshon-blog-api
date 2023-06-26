@@ -94,7 +94,7 @@ public class CommentServicesImple implements CommentServices {
 		Comment com = new Comment();
 		com.setCommentId(comDto.getCommentId());
 		com.setContent(comDto.getContent());
-		com.setUser(this.us.userDtoSecureToUser(comDto.getUser()));	
+		com.setUser(this.us.userDtoToUser(comDto.getUser()));	
 		
 		return com;		
 	}
@@ -107,7 +107,7 @@ public class CommentServicesImple implements CommentServices {
 		
 		comDto.setCommentId(com.getCommentId());
 		comDto.setContent(com.getContent());		
-		comDto.setUser(this.us.userToUserDtoSecure(com.getUser()));	
+		comDto.setUser(this.us.userToUserDto(com.getUser()));	
 		
 		return comDto;		
 	}

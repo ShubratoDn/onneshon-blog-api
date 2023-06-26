@@ -15,6 +15,6 @@ public class CommentDto {
 	@NotEmpty(message = "Write Something!")
 	private String content;
 	
-	private	UserDtoSecure user;
+	private	UserDto user;
 	
 }

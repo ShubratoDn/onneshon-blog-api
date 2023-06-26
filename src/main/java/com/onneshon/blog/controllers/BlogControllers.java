@@ -128,6 +128,12 @@ public class BlogControllers {
 	//get blog by id
 	@GetMapping("/blog/{blogId}")	
 	public ResponseEntity<?> getBlogById(@PathVariable int blogId){
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		BlogDto blog = blogServices.getBlogById(blogId);
 		return ResponseEntity.ok(blog);
 	}
@@ -140,10 +146,23 @@ public class BlogControllers {
 			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
 			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
 			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
-			){		
+			){	
+		
+		if(pageSize== 0) {
+			pageSize= 5;
+		}
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		PageResponse allBlogs = blogServices.getAllBlogs(pageNumber, pageSize, sortBy, sortDirection);
 		return ResponseEntity.ok(allBlogs);
 	}
+	
 	
 	//get blogs by user
 	@GetMapping("/user/{userId}/blogs")	
@@ -153,7 +172,9 @@ public class BlogControllers {
 			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
 			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
 			@RequestParam(value = "sortDirection", defaultValue = "desc", required = false) String sortDirection
-			){
+			) throws InterruptedException{
+		
+//		Thread.sleep(2000);
 		
 		PageResponse allBlogs = blogServices.getAllBlogsByUser(userId, pageNumber, pageSize, sortBy, sortDirection);
 		return ResponseEntity.ok(allBlogs);

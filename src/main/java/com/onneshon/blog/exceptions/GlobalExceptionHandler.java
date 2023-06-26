@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
-import io.jsonwebtoken.ExpiredJwtException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -51,7 +50,7 @@ public class GlobalExceptionHandler {
 
 		response.put("error", ex.getMessage());
 		
-		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Map<String, String>>(response, HttpStatus.NOT_FOUND);
 	}
 	
 	
