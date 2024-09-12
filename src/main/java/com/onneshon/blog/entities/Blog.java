@@ -35,7 +35,7 @@ public class Blog {
 	@Column(length = 5000, nullable = false)
 	private String blogContent;
 	
-	@Column(length = 500, nullable = false)
+	@Column(length = 500, nullable = true)
 	private String blogImage;
 
 	private Date addedDate;

@@ -71,7 +71,16 @@ public class CategoryServiceImple implements CategoryServices{
 		return categories;
 	}
 
-	
+	@Override
+	public List<CategoryDto> getCategoryByName(String title) {
+		List<Category> categoriesList = catRepo.findByCategoryTitle(title);
+		List<CategoryDto> categories = new ArrayList<>();
+		
+		for(Category category : categoriesList) {
+			categories.add(this.catTocatDto(category));
+		}		
+		return categories;
+	}
 	
 	
 	

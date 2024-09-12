@@ -23,5 +23,6 @@ public interface CategoryServices {
 	//get all category
 	List<CategoryDto> getAllCategory();
 	
-	
+	//get all category
+	List<CategoryDto> getCategoryByName(String name);
 }
