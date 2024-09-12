@@ -33,7 +33,7 @@ public class FileUploadHelper {
         }
         String randomHexCode = sb.toString();
         
-        String filePath ="User_Image_"+randomHexCode+"_"+System.currentTimeMillis()+"_.jpg";		
+        String filePath ="User_Image_"+randomHexCode+"_"+System.currentTimeMillis()+"_.jpg";	
 		
 		try {
 			
