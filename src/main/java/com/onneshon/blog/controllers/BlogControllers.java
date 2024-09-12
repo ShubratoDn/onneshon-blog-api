@@ -55,6 +55,8 @@ public class BlogControllers {
 	@Autowired
 	private CategoryServices categoryServices;
 
+
+
 	// add Blog
 	@PostMapping("/blog")
 	public ResponseEntity<?> addBlog(@RequestParam("blogData") String blogData,
@@ -74,6 +76,7 @@ public class BlogControllers {
 				category = categoryByName.get(0);
 			} else {
 				category = categoryServices.addCategory(blog.getCategory());
+
 			}
 			blog.setCategoryId(category.getCategoryId());
 			blog.setCategory(category);
