@@ -27,10 +27,10 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int categoryId;
 	
-	@Column(length = 2000, nullable = false)
+	@Column(length = 2000, nullable = true)
 	private String categoryDescription;
 	
-	@Column(length = 100, nullable = true)
+	@Column(length = 100, nullable = false)
 	private String categoryTitle;	
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

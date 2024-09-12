@@ -31,11 +31,8 @@ public class BlogDto {
 	private String blogImage;	
 	private Date addedDate;
 	
-	@NotNull(message = "Category can not Null")
-    @Min(value = 1, message = "Please, insert Category")
+	
 	private int categoryId;
-	
-	
 	
 	private CategoryDto category;
 
